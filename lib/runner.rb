@@ -2,7 +2,7 @@ require './lib/stat_tracker'
 
 game_path = './data/games.csv'
 team_path = './data/teams.csv'
-game_teams_path = './data/game_results.csv'
+results_path = './data/results.csv'
 
 locations = {
   games: game_path,
