@@ -1,5 +1,7 @@
 class Game
 
+  attr_reader :game_id, :type
+
   def initialize(game_data)
     @game_id = game_data[:game_id]
     @season = game_data[:season]
