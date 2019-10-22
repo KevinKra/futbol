@@ -11,9 +11,9 @@ class Result
     @shots = result_data[:shots]
     @tackles = result_data[:tackles]
     @pim = result_data[:pim]
-    @ppo = result_data[:ppo]
-    @ppg = result_data[:ppg]
-    @fowp = result_data[:fowp]
+    @ppo = result_data[:powerplayopportunities]
+    @ppg = result_data[:powerplaygoals]
+    @fowp = result_data[:faceoffwinpercentage]
     @giveaways = result_data[:giveaways]
     @takeaways = result_data[:takeaways]
   end

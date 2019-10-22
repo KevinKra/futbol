@@ -2,12 +2,12 @@ require './lib/stat_tracker'
 
 game_path = './data/games.csv'
 team_path = './data/teams.csv'
-results_path = './data/results.csv'
+result_path = './data/results.csv'
 
 locations = {
   games: game_path,
   teams: team_path,
-  results: results_path
+  result: result_path
 }
 
 stat_tracker = StatTracker.from_csv(locations)
