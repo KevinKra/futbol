@@ -1,11 +1,10 @@
-require 'minitest/autorun'
-require 'minitest/pride'
+require_relative './test_helper'
 require './lib/game'
 require_relative "../lib/result.rb"
 
 class ResultTest < Minitest::Test
   def setup
-    mock_result_data = { 
+    mock_result_data = {
       game_id: 2012030221,
       team_id: 3,
       HoA: "home",

@@ -1,5 +1,4 @@
-require 'minitest/autorun'
-require 'minitest/pride'
+require_relative './test_helper'
 require './lib/game'
 
 class GameTest < Minitest::Test
@@ -27,6 +26,5 @@ class GameTest < Minitest::Test
   def test_it_initializes
     assert_equal 2012030221, @game.game_id
     assert_equal "Postseason", @game.type
-    require "pry"; binding.pry
   end
 end
