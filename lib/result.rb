@@ -1,5 +1,5 @@
 class Result
-
+  attr_reader :result, :team_id, :hoa
   def initialize(result_data)
     @game_id = result_data[:game_id]
     @team_id = result_data[:team_id]
