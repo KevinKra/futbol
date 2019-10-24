@@ -62,7 +62,6 @@ class StatTracker
     season_average = Hash.new{|h,k| h[k] = []}
     @game_data.each { |game| season_average[game.season] << (game.away_goals + game.home_goals) }
     season_average.each { |key, value| season_average[key] = (value.sum.to_f / value.length).round(2) }
-    require "pry"; binding.pry
   end
 
 end
