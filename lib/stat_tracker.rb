@@ -42,9 +42,9 @@ class StatTracker
     output
   end
 
-  def percent_home_games_won(team_id)
+  def percent_home_games_won(team_id, format = "home")
     all_home_games = @result_data.result_data.select do |game| 
-      game.team_id == team_id.to_s && game.hoa == "home"
+      game.team_id == team_id.to_s && game.hoa == format
     end
     games_won = all_home_games.select do |game| 
       game.result == "WIN"
