@@ -7,14 +7,14 @@ class Result
     @result = result_data[:result]
     @settled_in = result_data[:settled_in]
     @head_coach = result_data[:head_coach]
-    @goals = result_data[:goals]
-    @shots = result_data[:shots]
-    @tackles = result_data[:tackles]
-    @pim = result_data[:pim]
-    @ppo = result_data[:powerplayopportunities]
-    @ppg = result_data[:powerplaygoals]
-    @fowp = result_data[:faceoffwinpercentage]
-    @giveaways = result_data[:giveaways]
-    @takeaways = result_data[:takeaways]
+    @goals = result_data[:goals].to_i
+    @shots = result_data[:shots].to_i
+    @tackles = result_data[:tackles].to_i
+    @pim = result_data[:pim].to_i
+    @ppo = result_data[:powerplayopportunities].to_i
+    @ppg = result_data[:powerplaygoals].to_i
+    @fowp = result_data[:faceoffwinpercentage].to_f
+    @giveaways = result_data[:giveaways].to_i
+    @takeaways = result_data[:takeaways].to_i
   end
 end
