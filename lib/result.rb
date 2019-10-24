@@ -17,4 +17,12 @@ class Result
     @giveaways = result_data[:giveaways].to_i
     @takeaways = result_data[:takeaways].to_i
   end
+
+  def self.parse_csv_data(file_path)
+    output = []
+    CSV.foreach(file_path, headers: :true, header_converters: :symbol) do |csv_row|
+      output << Result.new(csv_row)
+    end
+    output
+  end
 end
