@@ -74,13 +74,13 @@ class StatTracker
     end
     highest_difference
   end
-  
+
   def games_by_team_id(team_id, format, seek_result)
-    # team_id, format ("home", "away"), seek_result ("WIN", "LOSE", "TIE") 
-    all_matching_games = @result_data.result_data.select do |game| 
+    # team_id, format ("home", "away"), seek_result ("WIN", "LOSE", "TIE")
+    all_matching_games = @result_data.select do |game| 
       game.team_id == team_id.to_s && game.hoa == format
     end
-    matching_results = all_matching_games.select do |game| 
+    matching_results = all_matching_games.select do |game|
       game.result == seek_result
     end.length
     outcome_percentage = (matching_results.to_f / all_matching_games.length) * 100
