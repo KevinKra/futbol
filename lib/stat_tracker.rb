@@ -1,6 +1,6 @@
 require 'csv'
 require_relative './game_collection'
-require_relative './game'
+require_relative './game.rb'
 require_relative './team_collection'
 require_relative './team'
 require_relative './result_collection'
@@ -18,28 +18,10 @@ class StatTracker
     game_path = location_paths[:games]
     team_path = location_paths[:teams]
     result_path = location_paths[:result]
-    game_data = GameCollection.new(parse_csv_data(game_path, "game"))
-    team_data = TeamCollection.new(parse_csv_data(team_path, "team"))
-    result_data = ResultCollection.new(parse_csv_data(result_path, "result"))
-    self.new(game_data.game_data, team_data.team_data, result_data.result_data)
-  end
-
-  def self.parse_csv_data(file_path, format)
-    output = []
-    if format == "game"
-      CSV.foreach(file_path, headers: :true, header_converters: :symbol) do |csv_row|
-        output << Game.new(csv_row)
-      end
-    elsif format == "team"
-      CSV.foreach(file_path, headers: :true, header_converters: :symbol) do |csv_row|
-        output << Team.new(csv_row)
-      end
-    elsif format == "result"
-      CSV.foreach(file_path, headers: :true, header_converters: :symbol) do |csv_row|
-        output << Result.new(csv_row)
-      end
-    end
-    output
+    game_data = Game.parse_csv_data(game_path)
+    team_data = Team.parse_csv_data(team_path)
+    result_data = Result.parse_csv_data(result_path)
+    self.new(game_data, team_data, result_data)
   end
 
   def highest_total_score
@@ -77,7 +59,7 @@ class StatTracker
   
   def games_by_team_id(team_id, format, seek_result)
     # team_id, format ("home", "away"), seek_result ("WIN", "LOSE", "TIE") 
-    all_matching_games = @result_data.result_data.select do |game| 
+    all_matching_games = @result_data.select do |game| 
       game.team_id == team_id.to_s && game.hoa == format
     end
     matching_results = all_matching_games.select do |game| 
