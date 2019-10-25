@@ -13,7 +13,10 @@ class TeamCollection
   end
 
   def create_teams(team_data)
-    csv = CSV.foreach(team_data, headers:true, header_converters: :symbol)
-    csv.map { |row| Team.new(row) }
+    teams = []
+    CSV.foreach(team_data, headers:true, header_converters: :symbol) do |row|
+      teams << Team.new(row)
+    end
+    teams
   end
 end
