@@ -13,7 +13,10 @@ class ResultCollection
   end
 
   def create_results(result_data)
-    csv = CSV.foreach(result_data, headers:true, header_converters: :symbol)
-    csv.map { |row| Result.new(row) }
+  results = []
+    CSV.foreach(result_data, headers:true, header_converters: :symbol) do |row|
+      results << Result.new(row)
+    end
+    results
   end
 end
