@@ -13,8 +13,11 @@ class GameCollection
   end
 
   def create_games(game_data)
-    csv = CSV.foreach(game_data, headers:true, header_converters: :symbol)
-    csv.map { |row| Game.new(row) }
+  games = []
+    CSV.foreach(game_data, headers:true, header_converters: :symbol) do |row|
+      games << Game.new(row)
+    end
+    games
   end
 
   def highest_total_score
