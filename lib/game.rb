@@ -17,11 +17,11 @@ class Game
     @venue_link = game_data[:venue_link]
   end
 
-  def self.game_data(data)
+  def self.assign_game_data(data)
     @@game_data = data
   end
 
-  def self.class_game_data
+  def self.game_data
     @@game_data
   end
   
@@ -30,12 +30,10 @@ class Game
     CSV.foreach(file_path, headers: :true, header_converters: :symbol) do |csv_row|
       output << Game.new(csv_row)
     end
-    self.game_data(output)
+    self.assign_game_data(output)
   end
 
   def self.highest_total_score
-    a = @@game_data
-    # require "pry"; binding.pry
     max_sum = 0
     @@game_data.each do |game|
       sum = game.away_goals.to_i + game.home_goals.to_i
@@ -66,6 +64,28 @@ class Game
       end
     end
     highest_difference
+  end
+
+  def self.count_of_games_by_season
+    season_count = Hash.new(0)
+    @@game_data.each { |game| season_count[game.season] += 1 }
+    season_count
+  end
+
+  def self.average_goals_per_game
+    game_number = 0
+    goal_total = 0
+    @@game_data.each do |game|
+      game_number += 1
+      goal_total += game.away_goals + game.home_goals
+    end
+    (goal_total / game_number.to_f).round(2)
+  end
+
+  def self.average_goals_by_season
+    season_average = Hash.new{|h,k| h[k] = []}
+    @@game_data.each { |game| season_average[game.season] << (game.away_goals + game.home_goals) }
+    season_average.each { |key, value| season_average[key] = (value.sum.to_f / value.length).round(2) }
   end
 
 end
