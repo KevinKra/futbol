@@ -1,3 +1,5 @@
+require 'CSV'
+
 class GameCollection
 
   attr_reader :game_data
@@ -29,7 +31,7 @@ class GameCollection
   def lowest_total_score
     min_sum = 0
     @game_data.each do |game|
-      sum = game.away_goals.to_i + game.home_goals.to_i
+      sum = game.away_goals + game.home_goals
       if sum < min_sum
         min_sum = sum
       end
@@ -40,7 +42,7 @@ class GameCollection
   def biggest_blowout
     highest_difference = 0
     @game_data.each do |game|
-      difference = (game.away_goals.to_i - game.home_goals.to_i).abs
+      difference = (game.away_goals - game.home_goals).abs
       if difference > highest_difference
         highest_difference = difference
       end
