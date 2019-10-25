@@ -1,30 +1,23 @@
-require_relative './test_helper'
-require './lib/game'
+require 'minitest/autorun'
+require 'minitest/pride'
 require_relative "../lib/result.rb"
+require_relative "../lib/stat_tracker.rb"
+# require_relative "../data/mock_data/mock_results.csv"
 
 class ResultTest < Minitest::Test
   def setup
-    mock_result_data = {
-      game_id: 2012030221,
-      team_id: 3,
-      HoA: "home",
-      result: "LOSS",
-      settled_in: "OT",
-      head_coach: "John Tortorella",
-      goals: 2,
-      shots: 3,
-      tackles: 44,
-      pim: 8,
-      powerPlayOpportunities: 12,
-      powerPlayGoals: 31,
-      faceOffWinPercentage: 4.2,
-      giveaways: 9,
-      takeaways: 2
-    }
-    @result = Result.new(mock_result_data)
+    mock_results = "./data/mock_data/mock_results.csv"
+    @results = Result.parse_csv_data(mock_results)
   end
 
   def test_it_exists
-    assert_instance_of Result, @result
+    assert_instance_of Result, Result.class_result_data[0]
   end
+
+  def test_that_games_by_team_id_works_correctly
+    assert_equal 66.67, Result.games_by_team_id(6, "home", "WIN")
+    assert_equal 100, Result.games_by_team_id(6, "away", "WIN")
+    assert_equal 33.33, Result.games_by_team_id(3, "away", "TIE")
+  end
+
 end
