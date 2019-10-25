@@ -1,5 +1,21 @@
 class Result
-  attr_reader :result, :team_id, :hoa
+
+  attr_reader :result,
+              :team_id,
+              :hoa,
+              :result,
+              :settled_in,
+              :head_coach,
+              :goals,
+              :shots,
+              :tackles,
+              :pim,
+              :ppo,
+              :ppg,
+              :fowp,
+              :giveaways,
+              :takeaways
+
   def initialize(result_data)
     @game_id = result_data[:game_id]
     @team_id = result_data[:team_id]
