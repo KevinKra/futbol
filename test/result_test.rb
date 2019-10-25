@@ -2,7 +2,6 @@ require 'minitest/autorun'
 require 'minitest/pride'
 require_relative "../lib/result.rb"
 require_relative "../lib/stat_tracker.rb"
-# require_relative "../data/mock_data/mock_results.csv"
 
 class ResultTest < Minitest::Test
   def setup
@@ -11,7 +10,12 @@ class ResultTest < Minitest::Test
   end
 
   def test_it_exists
-    assert_instance_of Result, Result.class_result_data[0]
+    assert_instance_of Result, Result.result_data[0]
+  end
+
+  def test_it_has_the_correct_data_amount
+    total_data = Result.result_data
+    assert_equal 7, total_data.length
   end
 
   def test_that_games_by_team_id_works_correctly
