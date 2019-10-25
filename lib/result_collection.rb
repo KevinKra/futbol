@@ -1,3 +1,5 @@
+require 'CSV'
+
 class ResultCollection
 
   attr_reader :result_data
