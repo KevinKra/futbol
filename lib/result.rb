@@ -20,11 +20,11 @@ class Result
     @takeaways = result_data[:takeaways]
   end
 
-  def self.result_data(data)
+  def self.assign_result_data(data)
     @@result_data = data
   end
 
-  def self.class_result_data
+  def self.result_data
     @@result_data
   end
 
@@ -33,7 +33,7 @@ class Result
     CSV.foreach(file_path, headers: :true, header_converters: :symbol) do |csv_row|
       output << Result.new(csv_row)
     end
-    self.result_data(output)
+    self.assign_result_data(output)
   end
 
   def self.games_by_team_id(team_id, format, seek_result)
