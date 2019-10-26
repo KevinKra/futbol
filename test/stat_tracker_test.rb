@@ -11,6 +11,7 @@ class StatTrackerTest < Minitest::Test
     @stat_tracker = StatTracker.new
     @results = Game.parse_csv_data(game_path)
     @results = Result.parse_csv_data(result_path)
+    @teams = Team.parse_csv_data(team_path)
   end
 
   def test_it_exists
@@ -74,6 +75,10 @@ class StatTrackerTest < Minitest::Test
       '20162017' =>	4.75,
     }
     assert_equal average_goals_by_season, @stat_tracker.average_goals_by_season
+  end
+
+  def test_it_can_count_the_number_of_teams
+    assert_equal 29, Team.count_of_teams
   end
 
 end
