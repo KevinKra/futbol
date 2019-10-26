@@ -7,7 +7,7 @@ result_path = './data/results.csv'
 locations = {
   games: game_path,
   teams: team_path,
-  result: result_path
+  results: result_path
 }
 
 stat_tracker = StatTracker.from_csv(locations)
