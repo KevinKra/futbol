@@ -1,7 +1,7 @@
 class Result
   @@result_data = []
 
-  attr_reader :team_id, :hoa, :result
+  attr_reader :team_id, :hoa, :result, :goals
   def initialize(result_data)
     @game_id = result_data[:game_id]
     @team_id = result_data[:team_id]
@@ -9,7 +9,7 @@ class Result
     @result = result_data[:result]
     @settled_in = result_data[:settled_in]
     @head_coach = result_data[:head_coach]
-    @goals = result_data[:goals]
+    @goals = result_data[:goals].to_i
     @shots = result_data[:shots]
     @tackles = result_data[:tackles]
     @pim = result_data[:pim]
@@ -50,17 +50,56 @@ class Result
 
 # Name of the team with the highest average score
 # per game across all seasons when they are away.	-> Returns String
-  def highest_scoring_visitor
+  def self.highest_scoring_visitor
     # Go through result data and find all away games by team
-    away_games_by_team = @@result_data.find_all do |game|
+    away_games = @@result_data.find_all do |game|
       game.hoa == "away"
     end
+    # Group away games by team
+    away_games_by_team = away_games.group_by do |game|
+      game.team_id
+    end
+
+
+
+    away_games_by_team = {}
+    away_games.group_by do |game|
+    away_games_by_team[game.team_id]
+    end
     require "pry"; binding.pry
+
+    # Average goals by game by team
+    # average_goals_per_game = away_games_by_team.each do |team|
+    #   team.each do |game|
+    #     require "pry"; binding.pry
+    #     game.goals / away_games_by_team.length
+    #   end
+    #   average_goals_per_game
+    #   require "pry"; binding.pry
+    # end
+
+
 
     # Average score of goals by team
     # Find highest average team id
     # match team id to team name and return string
 
+  end
+
+  def self.find_team_name(id)
+    @@game
+  end
+
+  def self.highest_scoring_visitor
+    team_average = Hash.new{ |hash,k| hash[k] = Hash.new(0) }
+    @@result_data.each do |game|
+      if game.hoa == "away"
+        team_average[game.team_id][:number_of_games] += 1
+        team_average[game.team_id][:number_of_goals] += game.goals
+        team_average[game.team_id][:average_goals] = (team_average[game.team_id][:number_of_goals] / team_average[game.team_id][:number_of_games].to_f).round(2)
+      end
+    end
+    team_average.max_by { |team| [:average_goals] }[0]
   end
 
 # Name of the team with the highest average score
