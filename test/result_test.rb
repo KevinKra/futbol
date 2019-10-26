@@ -24,4 +24,12 @@ class ResultTest < Minitest::Test
     assert_equal 33.33, Result.games_by_team_id(3, "away", "TIE")
   end
 
+  def test_it_can_determine_the_team_with_most_goals_across_all_seasons
+    assert_equal "3", Result.find_best_offense
+  end
+
+  def test_it_can_determine_the_team_with_least_goals_across_all_seasons
+    assert_equal "6", Result.find_best_offense(false)
+  end
+
 end
