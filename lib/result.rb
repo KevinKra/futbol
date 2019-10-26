@@ -1,7 +1,7 @@
 class Result
   @@result_data = []
 
-  attr_reader :team_id, :hoa, :result
+  attr_reader :team_id, :hoa, :result, :goals
   def initialize(result_data)
     @game_id = result_data[:game_id] 
     @team_id = result_data[:team_id]
@@ -9,7 +9,7 @@ class Result
     @result = result_data[:result]
     @settled_in = result_data[:settled_in]
     @head_coach = result_data[:head_coach]
-    @goals = result_data[:goals]
+    @goals = result_data[:goals].to_i
     @shots = result_data[:shots]
     @tackles = result_data[:tackles]
     @pim = result_data[:pim]
@@ -46,5 +46,12 @@ class Result
     end.length
     outcome_percentage = (matching_results.to_f / all_matching_games.length) * 100
     outcome_percentage.round(2)
+  end
+
+  def self.find_best_offense(average = true)
+    teams = Hash[@@result_data.map { |result| [result.team_id, []]}]
+    @@result_data.each { |result| teams[result.team_id] << result.goals}
+    teams.each { |key, value| teams[key] = (value.sum.to_f / value.length).round(2) }
+    average ? teams.max_by {|team, goals_average| goals_average}[0] : teams.min_by {|team, goals_average| goals_average}[0]
   end
 end
