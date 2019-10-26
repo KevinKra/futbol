@@ -3,7 +3,7 @@ class Result
 
   attr_reader :team_id, :hoa, :result
   def initialize(result_data)
-    @game_id = result_data[:game_id] 
+    @game_id = result_data[:game_id]
     @team_id = result_data[:team_id]
     @hoa = result_data[:hoa]
     @result = result_data[:result]
@@ -37,14 +37,47 @@ class Result
   end
 
   def self.games_by_team_id(team_id, format, seek_result)
-    # team_id, format ("home", "away"), seek_result ("WIN", "LOSE", "TIE") 
-    all_matching_games = @@result_data.select do |game| 
+    # team_id, format ("home", "away"), seek_result ("WIN", "LOSE", "TIE")
+    all_matching_games = @@result_data.select do |game|
       game.team_id == team_id.to_s && game.hoa == format
     end
-    matching_results = all_matching_games.select do |game| 
+    matching_results = all_matching_games.select do |game|
       game.result == seek_result
     end.length
     outcome_percentage = (matching_results.to_f / all_matching_games.length) * 100
     outcome_percentage.round(2)
   end
+
+# Name of the team with the highest average score
+# per game across all seasons when they are away.	-> Returns String
+  def highest_scoring_visitor
+    # Go through result data and find all away games by team
+    away_games_by_team = @@result_data.find_all do |game|
+      game.hoa == "away"
+    end
+    require "pry"; binding.pry
+
+    # Average score of goals by team
+    # Find highest average team id
+    # match team id to team name and return string
+
+  end
+
+# Name of the team with the highest average score
+# per game across all seasons when they are home. -> Returns String
+  def highest_scoring_home_team
+  end
+
+# Name of the team with the lowest average score
+# per game across all seasons when they are a visitor. -> Returns String
+  def lowest_scoring_visitor
+  end
+
+# Name of the team with the lowest average score
+# per game across all seasons when they are at home.
+
+  def lowest_scoring_home_team
+  end
+
+
 end
