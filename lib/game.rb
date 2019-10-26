@@ -24,7 +24,7 @@ class Game
   def self.game_data
     @@game_data
   end
-  
+
   def self.parse_csv_data(file_path)
     output = []
     CSV.foreach(file_path, headers: :true, header_converters: :symbol) do |csv_row|
@@ -33,10 +33,11 @@ class Game
     self.assign_game_data(output)
   end
 
+  # Highest sum of the winning and losing teams’ scores	-> returns Integer
   def self.highest_total_score
     max_sum = 0
     @@game_data.each do |game|
-      sum = game.away_goals.to_i + game.home_goals.to_i
+      sum = game.away_goals + game.home_goals
       if sum > max_sum
         max_sum = sum
       end
@@ -44,10 +45,11 @@ class Game
     max_sum
   end
 
+# Lowest sum of the winning and losing teams’ scores -> returns Integer
   def self.lowest_total_score
     min_sum = 0
     @@game_data.each do |game|
-      sum = game.away_goals.to_i + game.home_goals.to_i
+      sum = game.away_goals + game.home_goals
       if sum < min_sum
         min_sum = sum
       end
@@ -55,6 +57,7 @@ class Game
     min_sum
   end
 
+# Highest difference between winner and loser	-> returns Integer
   def self.biggest_blowout
     highest_difference = 0
     @@game_data.each do |game|
@@ -89,4 +92,3 @@ class Game
   end
 
 end
-
