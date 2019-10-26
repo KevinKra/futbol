@@ -50,4 +50,12 @@ class StatTracker
   def count_of_teams
     Team.count_of_teams
   end
+
+  def best_offense
+    Result.find_best_offense
+  end
+
+  def worst_offense
+    Result.find_best_offense(false)
+  end
 end
