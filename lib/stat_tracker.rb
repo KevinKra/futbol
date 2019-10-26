@@ -7,6 +7,7 @@ class StatTracker
   def self.from_csv(location_paths)
     result_data = Result.parse_csv_data(location_paths[:results])
     game_data = Game.parse_csv_data(location_paths[:games])
+    team_data = Team.parse_csv_data(location_paths[:teams])
     StatTracker.new
   end
 
@@ -44,5 +45,9 @@ class StatTracker
 
   def average_goals_by_season
     Game.average_goals_by_season
+  end
+
+  def count_of_teams
+    Team.count_of_teams
   end
 end
