@@ -38,5 +38,5 @@ class Team
       team.team_id == id
     end.team_name
   end
-
+  
 end
