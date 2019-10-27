@@ -1,7 +1,22 @@
 class Result
   @@result_data = []
 
-  attr_reader :team_id, :hoa, :result, :goals
+  attr_reader :game_id,
+              :team_id,
+              :hoa,
+              :result,
+              :settled_in,
+              :head_coach,
+              :goals,
+              :shots,
+              :tackles,
+              :pim,
+              :ppo,
+              :ppg,
+              :fowp,
+              :giveaways,
+              :takeaways
+
   def initialize(result_data)
     @game_id = result_data[:game_id]
     @team_id = result_data[:team_id]
@@ -92,5 +107,19 @@ class Result
     team_average = self.average_scores("home")
     team_average.min_by {|key, value| value[:average_goals] }[0]
   end
+
+  # Highest number of goals a particular team has scored in a single game.
+  # -> Returns Integer
+  # def self.most_goals_scored
+  def self.most_goals_scored
+    @@result_data.max_by { |result| result.goals }.goals
+  end
+
+# Lowest numer of goals a particular team has scored in a single game.
+# -> Returns Integer
+  def self.fewest_goals_scored
+    @@result_data.min_by { |result| result.goals }.goals
+  end
+
 
 end
