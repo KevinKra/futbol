@@ -2,7 +2,8 @@ require 'csv'
 
 class Team
   @@team_data = []
-
+  
+  attr_reader :team_id, :team_name
   def initialize(team_data)
     @team_id = team_data[:team_id]
     @franchise_id = team_data[:franchiseid]
