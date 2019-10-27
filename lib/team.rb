@@ -2,7 +2,7 @@ class Team
   @@team_data = []
 
   attr_reader :team_id,
-              :franchiseid,
+              :franchise_id,
               :team_name,
               :abbreviation,
               :stadium,
@@ -34,9 +34,7 @@ class Team
   end
 
   def self.lookup_team_name(id)
-    @@team_data.find do |team|
-      team.team_id == id
-    end.team_name
+    @@team_data.find { |team| team.team_id == id }.team_name
   end
-  
+
 end
