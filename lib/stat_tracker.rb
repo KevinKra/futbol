@@ -67,4 +67,12 @@ class StatTracker
     Team.lookup_team_name(lowest_average)
   end
 
+  def most_goals_scored
+    Result.most_goals_scored
+  end
+
+  def fewest_goals_scored|
+    Result.fewest_goals_scored
+  end
+
 end
