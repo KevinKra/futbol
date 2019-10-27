@@ -24,4 +24,24 @@ class ResultTest < Minitest::Test
     assert_equal 33.33, Result.games_by_team_id(3, "away", "TIE")
   end
 
+  def test_average_scores_by_type
+    assert_equal 2.0, Result.average_scores("away").values[0][:average_goals]
+  end
+
+  def test_highest_scoring_visitor
+    assert_equal "3", Result.highest_scoring_visitor
+  end
+
+  def test_highest_scoring_home_team
+    assert_equal "6", Result.highest_scoring_home_team
+  end
+
+  def test_lowest_scoring_visitor
+    assert_equal "6", Result.lowest_scoring_visitor
+  end
+
+  def test_lowest_scoring_home_team
+    assert_equal "6", Result.lowest_scoring_home_team
+  end
+
 end
