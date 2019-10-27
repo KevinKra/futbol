@@ -49,8 +49,22 @@ class StatTracker
 
   def highest_scoring_visitor
     highest_average = Result.highest_scoring_visitor
-    require "pry"; binding.pry
     Team.lookup_team_name(highest_average)
+  end
+
+  def highest_scoring_home_team
+    highest_average = Result.highest_scoring_home_team
+    Team.lookup_team_name(highest_average)
+  end
+
+  def lowest_scoring_visitor
+    lowest_average = Result.lowest_scoring_visitor
+    Team.lookup_team_name(lowest_average)
+  end
+
+  def lowest_scoring_home_team
+    lowest_average = Result.lowest_scoring_home_team
+    Team.lookup_team_name(lowest_average)
   end
 
 end
