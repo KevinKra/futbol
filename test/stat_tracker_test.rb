@@ -82,11 +82,18 @@ class StatTrackerTest < Minitest::Test
   end
 
   def test_it_can_determine_the_team_with_most_goals_across_all_seasons
-    assert_equal "3", @stat_tracker.best_offense
+    assert_equal "Houston Dynamo", @stat_tracker.best_offense
   end
 
   def test_it_can_determine_the_team_with_least_goals_across_all_seasons
-    assert_equal "6", @stat_tracker.worst_offense
+    assert_equal "FC Dallas", @stat_tracker.worst_offense
   end
 
+  def test_it_can_find_the_best_defense
+    assert_equal "New England Revolution", @stat_tracker.best_defense
+  end
+
+  def test_it_can_find_the_best_defense
+    assert_equal "Toronto FC", @stat_tracker.worst_defense
+  end
 end
