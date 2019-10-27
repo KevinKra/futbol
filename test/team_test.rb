@@ -1,20 +1,18 @@
+require 'CSV'
 require_relative './test_helper'
 require_relative "../lib/team.rb"
 
 class TeamTest < Minitest::Test
   def setup
-    mock_team_data = {
-      team_id: 3,
-      franchiseId: 23,
-      teamName: "ATL United",
-      abbreviation: "ATL",
-      Stadium: "Mercedes-Benz Stadium",
-      link: "/api/v1/teams/1"
-    }
-    @team = Team.new(mock_team_data)
+    mock_teams = "./data/mock_data/mock_teams.csv"
+    @teams = Team.parse_csv_data(mock_teams)
   end
 
   def test_it_exists
-    assert_instance_of Team, @team
+    assert_instance_of Team, @teams[0]
+  end
+
+  def test_lookup_team_name
+    assert_equal "Houston Dynamo", Team.lookup_team_name("3")
   end
 end
