@@ -88,5 +88,12 @@ class Game
     season_average.each { |key, value| season_average[key] = (value.sum.to_f / value.length).round(2) }
   end
 
+  def self.opponent_goals_average(lowest = true)
+    team_average =  Hash[@@game_data.map { |game| [game.home_team_id, []]}]
+    @@game_data.each { |game| team_average[game.home_team_id] << game.away_goals}
+    team_average.each { |key, value| team_average[key] = (value.sum.to_f / value.length).round(2) }
+    lowest ? team_average.min_by { |team, avg_opponent_goals| avg_opponent_goals}[0] : team_average.max_by { |team, avg_opponent_goals| avg_opponent_goals}[0]
+  end
+
 end
 
