@@ -33,8 +33,7 @@ class Team
     self.assign_team_data(output)
   end
 
-  def self.lookup_team_name(id)
-    @@team_data.find { |team| team.team_id == id }.team_name
+  def self.lookup_team_name(team_id)
+    @@team_data.find { |team| team.team_id == team_id }.team_name
   end
-
 end

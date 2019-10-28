@@ -58,23 +58,17 @@ class Game
     self.score_difference.max_by { |difference| difference }
   end
 
-  def self.count_of_games_by_season
+  def self.count_of_games_by_season # iteration-2-darren
     season_count = Hash.new(0)
     @@game_data.each { |game| season_count[game.season] += 1 }
     season_count
   end
 
-  def self.average_goals_per_game
-    game_number = 0
-    goal_total = 0
-    @@game_data.each do |game|
-      game_number += 1
-      goal_total += game.away_goals + game.home_goals
-    end
-    (goal_total / game_number.to_f).round(2)
+  def self.average_goals_per_game # iteration-2-darren
+    (@@game_data.reduce(0) { |acc, game| acc + game.away_goals + game.home_goals } / @@game_data.count.to_f).round(2)
   end
 
-  def self.average_goals_by_season
+  def self.average_goals_by_season # iteration-2-darren
     season_average = Hash.new{|h,k| h[k] = []}
     @@game_data.each { |game| season_average[game.season] << (game.away_goals + game.home_goals) }
     season_average.each { |key, value| season_average[key] = (value.sum.to_f / value.length).round(2) }
