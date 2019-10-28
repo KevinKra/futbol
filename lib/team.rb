@@ -2,8 +2,14 @@ require 'csv'
 
 class Team
   @@team_data = []
-  
-  attr_reader :team_id, :team_name
+
+  attr_reader :team_id,
+              :franchise_id,
+              :team_name,
+              :abbreviation,
+              :stadium,
+              :link
+
   def initialize(team_data)
     @team_id = team_data[:team_id]
     @franchise_id = team_data[:franchiseid]
@@ -20,7 +26,7 @@ class Team
   def self.team_data
     @@team_data
   end
-  
+
   def self.parse_csv_data(file_path)
     output = []
     CSV.foreach(file_path, headers: :true, header_converters: :symbol) do |csv_row|
@@ -33,4 +39,7 @@ class Team
     @@team_data.length
   end
 
+  def self.lookup_team_name(team_id)
+    @@team_data.find { |team| team.team_id == team_id }.team_name
+  end
 end

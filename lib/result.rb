@@ -3,7 +3,7 @@ class Result
 
   attr_reader :team_id, :hoa, :result, :goals
   def initialize(result_data)
-    @game_id = result_data[:game_id] 
+    @game_id = result_data[:game_id]
     @team_id = result_data[:team_id]
     @hoa = result_data[:hoa]
     @result = result_data[:result]
@@ -37,15 +37,19 @@ class Result
   end
 
   def self.games_by_team_id(team_id, format, seek_result)
-    # team_id, format ("home", "away"), seek_result ("WIN", "LOSE", "TIE") 
-    all_matching_games = @@result_data.select do |game| 
+    # team_id, format ("home", "away"), seek_result ("WIN", "LOSE", "TIE")
+    all_matching_games = @@result_data.select do |game|
       game.team_id == team_id.to_s && game.hoa == format
     end
-    matching_results = all_matching_games.select do |game| 
+    matching_results = all_matching_games.select do |game|
       game.result == seek_result
     end.length
     outcome_percentage = (matching_results.to_f / all_matching_games.length) * 100
     outcome_percentage.round(2)
+  end
+
+  def self.find_team_name(id)
+    @@game
   end
 
   def self.find_best_offense(average = true)
@@ -54,4 +58,73 @@ class Result
     teams.each { |key, value| teams[key] = (value.sum.to_f / value.length).round(2) }
     average ? teams.max_by {|team, goals_average| goals_average}[0] : teams.min_by {|team, goals_average| goals_average}[0]
   end
+  
+  # Helper method to generate average scores by team by type -> Returns nested Hash
+  def self.average_scores(type)
+    team_average = Hash.new{ |hash,k| hash[k] = Hash.new(0) }
+    @@result_data.each do |game|
+      if game.hoa == type
+        team_average[game.team_id][:number_of_games] += 1
+        team_average[game.team_id][:number_of_goals] += game.goals
+        team_average[game.team_id][:average_goals] = (team_average[game.team_id][:number_of_goals] / team_average[game.team_id][:number_of_games].to_f).round(2)
+      end
+    end
+    team_average
+  end
+
+  # Name of the team with the highest average score
+  # per game across all seasons when they are away.	-> Returns String
+  def self.highest_scoring_visitor
+    team_average = self.average_scores("away")
+    team_average.max_by {|key, value| value[:average_goals] }[0]
+  end
+
+# Name of the team with the highest average score
+# per game across all seasons when they are home. -> Returns String
+  def self.highest_scoring_home_team
+    team_average = self.average_scores("home")
+    team_average.max_by {|key, value| value[:average_goals] }[0]
+  end
+
+# Name of the team with the lowest average score
+# per game across all seasons when they are a visitor. -> Returns String
+  def self.lowest_scoring_visitor
+    team_average = self.average_scores("away")
+    team_average.min_by {|key, value| value[:average_goals] }[0]
+  end
+
+# Name of the team with the lowest average score
+# per game across all seasons when they are at home.
+  def self.lowest_scoring_home_team
+    team_average = self.average_scores("home")
+    team_average.min_by {|key, value| value[:average_goals] }[0]
+  end
+
+ def self.winningest_team  # iteration-3-darren
+  winningest = Hash.new { |hash, key| hash[key] = Hash.new(0) }
+  @@result_data.each do |result|
+    winningest[result.team_id][:nr_games_played] += 1
+    winningest[result.team_id][:nr_games_won] += 1 if result.result == 'WIN'
+    winningest[result.team_id][:win_percentage] = (winningest[result.team_id][:nr_games_won] / winningest[result.team_id][:nr_games_played].to_f*100).round(2) if winningest[result.team_id][:nr_games_won] > 0
+  end
+  winningest.max_by { |key, value| value[:win_percentage] }[0]
+ end
+
+ def self.best_worst_fans # iteration-3-darren helper method for best_fans and worst_fans
+  best_worst = Hash.new { |hash, key| hash[key] = Hash.new(0) }
+  @@result_data.each do |result|
+    if result.hoa == 'home'
+      best_worst[result.team_id][:games_played_home] += 1
+      best_worst[result.team_id][:games_won_home] += 1 if result.result == 'WIN'
+      best_worst[result.team_id][:win_pct_home] = (best_worst[result.team_id][:games_won_home] / best_worst[result.team_id][:games_played_home].to_f * 100).round(2)
+    else # ie if hoa == 'away'
+      best_worst[result.team_id][:games_played_away] += 1
+      best_worst[result.team_id][:games_won_away] += 1 if result.result == 'WIN'
+      best_worst[result.team_id][:win_pct_away] = (best_worst[result.team_id][:games_won_away] / best_worst[result.team_id][:games_played_away].to_f * 100).round(2)
+    end
+    best_worst[result.team_id][:diff_home_away_win_pct] = (best_worst[result.team_id][:win_pct_home] - best_worst[result.team_id][:win_pct_away]).round(2)
+   end
+  best_worst
+ end
+
 end
