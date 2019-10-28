@@ -47,8 +47,28 @@ class StatTracker
   def average_goals_by_season # iteration-2-darren
     Game.average_goals_by_season
   end
+  
+  def highest_scoring_visitor
+    highest_average = Result.highest_scoring_visitor
+    Team.lookup_team_name(highest_average)
+  end
 
-  def winningest_team # iteration-3-darren
+  def highest_scoring_home_team
+    highest_average = Result.highest_scoring_home_team
+    Team.lookup_team_name(highest_average)
+  end
+
+  def lowest_scoring_visitor
+    lowest_average = Result.lowest_scoring_visitor
+    Team.lookup_team_name(lowest_average)
+  end
+
+  def lowest_scoring_home_team
+    lowest_average = Result.lowest_scoring_home_team
+    Team.lookup_team_name(lowest_average)
+  end
+  
+   def winningest_team # iteration-3-darren
     id_best_team = Result.winningest_team
     Team.lookup_team_name(id_best_team)
   end
@@ -62,5 +82,4 @@ class StatTracker
     team_ids = Result.best_worst_fans.keep_if { |key, value| value[:diff_home_away_win_pct] < 0 }.keys
     team_names = team_ids.map { |team_id| Team.lookup_team_name(team_id) }
   end
-
 end

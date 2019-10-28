@@ -33,37 +33,29 @@ class Game
     self.assign_game_data(output)
   end
 
+  # Helper method to sum total score by game -> Returns array of Integers
+  def self.total_scores
+    @@game_data.map { |game| game.away_goals + game.home_goals }
+  end
+
+  # Highest sum of the winning and losing teams’ scores	-> returns Integer
   def self.highest_total_score
-    max_sum = 0
-    @@game_data.each do |game|
-      sum = game.away_goals.to_i + game.home_goals.to_i
-      if sum > max_sum
-        max_sum = sum
-      end
-    end
-    max_sum
+    self.total_scores.max_by { |score| score }
   end
 
+# Lowest sum of the winning and losing teams’ scores -> returns Integer
   def self.lowest_total_score
-    min_sum = 0
-    @@game_data.each do |game|
-      sum = game.away_goals.to_i + game.home_goals.to_i
-      if sum < min_sum
-        min_sum = sum
-      end
-    end
-    min_sum
+    self.total_scores.min_by { |score| score }
   end
 
+  # Helper method to get score differences of all games -> Returns array of Integers
+  def self.score_difference
+    @@game_data.map { |game| (game.away_goals - game.home_goals).abs}
+  end
+
+  # Highest difference between winner and loser	-> returns Integer
   def self.biggest_blowout
-    highest_difference = 0
-    @@game_data.each do |game|
-      difference = (game.away_goals.to_i - game.home_goals.to_i).abs
-      if difference > highest_difference
-        highest_difference = difference
-      end
-    end
-    highest_difference
+    self.score_difference.max_by { |difference| difference }
   end
 
   def self.count_of_games_by_season # iteration-2-darren

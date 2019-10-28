@@ -18,10 +18,6 @@ class StatTrackerTest < Minitest::Test
     assert_instance_of StatTracker, @stat_tracker
   end
 
-  def test_it_exists
-    assert_instance_of StatTracker, @stat_tracker
-  end
-
   # def test_initialized
   #   assert_equal 32, @stat_tracker.team_data.length
   #   assert_equal 7, @stat_tracker.result_data.length
@@ -33,7 +29,7 @@ class StatTrackerTest < Minitest::Test
   end
 
   def test_lowest_total_score
-    assert_equal 0, @stat_tracker.lowest_total_score
+    assert_equal 2, @stat_tracker.lowest_total_score
   end
 
   def test_biggest_blowout
@@ -52,7 +48,6 @@ class StatTrackerTest < Minitest::Test
     assert_equal 33.33, @stat_tracker.percentage_ties(3)
   end
 
-
   def test_count_of_games_by_season  # iteration-2-darren
     games_by_season = {
       '20122013' =>	5,
@@ -67,6 +62,7 @@ class StatTrackerTest < Minitest::Test
     assert_equal 4.24, @stat_tracker.average_goals_per_game
   end
 
+
   def test_average_goals_by_season  # iteration-2-darren
     average_goals_by_season = {
       '20122013' =>	4.2,
@@ -77,6 +73,21 @@ class StatTrackerTest < Minitest::Test
     assert_equal average_goals_by_season, @stat_tracker.average_goals_by_season
   end
 
+  def test_highest_scoring_visitor
+    assert_equal "Houston Dynamo", @stat_tracker.highest_scoring_visitor
+  end
+
+  def test_highest_scoring_home_team
+    assert_equal "FC Dallas", @stat_tracker.highest_scoring_home_team
+  end
+
+  def test_lowest_scoring_visitor
+    assert_equal "FC Dallas", @stat_tracker.lowest_scoring_visitor
+  end
+
+  def test_lowest_scoring_home_team
+    assert_equal "FC Dallas", @stat_tracker.lowest_scoring_home_team
+  
   def test_winningest_team # iteration-3-darren
     assert_equal 'FC Dallas', @stat_tracker.winningest_team
   end
@@ -88,5 +99,4 @@ class StatTrackerTest < Minitest::Test
   def test_worst_fans # iteration-3-darren
     assert_equal ['FC Dallas'], @stat_tracker.worst_fans
   end
-
 end

@@ -1,7 +1,13 @@
 class Team
   @@team_data = []
 
-  attr_reader :team_id, :team_name
+  attr_reader :team_id,
+              :franchise_id,
+              :team_name,
+              :abbreviation,
+              :stadium,
+              :link
+
   def initialize(team_data)
     @team_id = team_data[:team_id]
     @franchise_id = team_data[:franchiseid]
@@ -30,5 +36,4 @@ class Team
   def self.lookup_team_name(team_id)
     @@team_data.find { |team| team.team_id == team_id }.team_name
   end
-
 end
