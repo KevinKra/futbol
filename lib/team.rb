@@ -1,5 +1,7 @@
 class Team
+  @@team_data = []
 
+  attr_reader :team_id, :team_name
   def initialize(team_data)
     @team_id = team_data[:team_id]
     @franchise_id = team_data[:franchiseid]
@@ -9,12 +11,24 @@ class Team
     @link = team_data[:link]
   end
 
+  def self.assign_team_data(data)
+    @@team_data = data
+  end
+
+  def self.team_data
+    @@team_data
+  end
+
   def self.parse_csv_data(file_path)
     output = []
     CSV.foreach(file_path, headers: :true, header_converters: :symbol) do |csv_row|
       output << Team.new(csv_row)
     end
-    output
+    self.assign_team_data(output)
+  end
+
+  def self.lookup_team_name(team_id)
+    @@team_data.find { |team| team.team_id == team_id }.team_name
   end
 
 end
