@@ -3,7 +3,7 @@ class Result
 
   attr_reader :team_id, :hoa, :result
   def initialize(result_data)
-    @game_id = result_data[:game_id] 
+    @game_id = result_data[:game_id]
     @team_id = result_data[:team_id]
     @hoa = result_data[:hoa]
     @result = result_data[:result]
@@ -37,14 +37,42 @@ class Result
   end
 
   def self.games_by_team_id(team_id, format, seek_result)
-    # team_id, format ("home", "away"), seek_result ("WIN", "LOSE", "TIE") 
-    all_matching_games = @@result_data.select do |game| 
+    # team_id, format ("home", "away"), seek_result ("WIN", "LOSE", "TIE")
+    all_matching_games = @@result_data.select do |game|
       game.team_id == team_id.to_s && game.hoa == format
     end
-    matching_results = all_matching_games.select do |game| 
+    matching_results = all_matching_games.select do |game|
       game.result == seek_result
     end.length
     outcome_percentage = (matching_results.to_f / all_matching_games.length) * 100
     outcome_percentage.round(2)
   end
+
+  def self.winningest_team  # iteration-3-darren
+    winningest = Hash.new { |hash, key| hash[key] = Hash.new(0) }
+    @@result_data.each do |result|
+      winningest[result.team_id][:nr_games_played] += 1
+      winningest[result.team_id][:nr_games_won] += 1 if result.result == 'WIN'
+      winningest[result.team_id][:win_percentage] = (winningest[result.team_id][:nr_games_won] / winningest[result.team_id][:nr_games_played].to_f*100).round(2) if winningest[result.team_id][:nr_games_won] > 0
+    end
+    winningest.max_by { |key, value| value[:win_percentage] }[0]
+  end
+
+  def self.best_worst_fans # iteration-3-darren helper method for best_fans and worst_fans
+    best_worst = Hash.new { |hash, key| hash[key] = Hash.new(0) }
+    @@result_data.each do |result|
+      if result.hoa == 'home'
+        best_worst[result.team_id][:games_played_home] += 1
+        best_worst[result.team_id][:games_won_home] += 1 if result.result == 'WIN'
+        best_worst[result.team_id][:win_pct_home] = (best_worst[result.team_id][:games_won_home] / best_worst[result.team_id][:games_played_home].to_f * 100).round(2)
+      else # ie if hoa == 'away'
+        best_worst[result.team_id][:games_played_away] += 1
+        best_worst[result.team_id][:games_won_away] += 1 if result.result == 'WIN'
+        best_worst[result.team_id][:win_pct_away] = (best_worst[result.team_id][:games_won_away] / best_worst[result.team_id][:games_played_away].to_f * 100).round(2)
+      end
+      best_worst[result.team_id][:diff_home_away_win_pct] = (best_worst[result.team_id][:win_pct_home] - best_worst[result.team_id][:win_pct_away]).round(2)
+    end
+    best_worst
+  end
+
 end
