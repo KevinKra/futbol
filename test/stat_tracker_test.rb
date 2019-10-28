@@ -9,12 +9,9 @@ class StatTrackerTest < Minitest::Test
     game_path = './data/mock_data/mock_games.csv'
     team_path = './data/mock_data/mock_teams.csv'
     @stat_tracker = StatTracker.new
-    @results = Game.parse_csv_data(game_path)
+    @games = Game.parse_csv_data(game_path)
     @results = Result.parse_csv_data(result_path)
-  end
-
-  def test_it_exists
-    assert_instance_of StatTracker, @stat_tracker
+    @teams = Team.parse_csv_data(team_path)
   end
 
   def test_it_exists
@@ -32,7 +29,7 @@ class StatTrackerTest < Minitest::Test
   end
 
   def test_lowest_total_score
-    assert_equal 0, @stat_tracker.lowest_total_score
+    assert_equal 2, @stat_tracker.lowest_total_score
   end
 
   def test_biggest_blowout
@@ -40,19 +37,18 @@ class StatTrackerTest < Minitest::Test
   end
 
   def test_it_can_return_a_percentage_of_home_games_won
-    assert_equal 66.67, @stat_tracker.percentage_home_wins(6)
-  end 
+    assert_equal 100.0, @stat_tracker.percentage_home_wins(6)
+  end
 
   def test_it_can_return_a_percentage_of_away_games_won
     assert_equal 100, @stat_tracker.percentage_visitor_wins(6)
   end
 
   def test_it_can_return_a_percentage_of_games_tied
-    assert_equal 33.33, @stat_tracker.percentage_ties(3)
+    assert_equal 0.0, @stat_tracker.percentage_ties(3)
   end
 
-
-  def test_count_of_games_by_season
+  def test_count_of_games_by_season  # iteration-2-darren
     games_by_season = {
       '20122013' =>	5,
       '20142015' =>	6,
@@ -62,11 +58,11 @@ class StatTrackerTest < Minitest::Test
     assert_equal games_by_season, @stat_tracker.count_of_games_by_season
   end
 
-  def test_average_goals_per_game
+  def test_average_goals_per_game  # iteration-2-darren
     assert_equal 4.24, @stat_tracker.average_goals_per_game
   end
 
-  def test_average_goals_by_season    
+  def test_average_goals_by_season  # iteration-2-darren
     average_goals_by_season = {
       '20122013' =>	4.2,
       '20142015' =>	3.5,
@@ -76,4 +72,51 @@ class StatTrackerTest < Minitest::Test
     assert_equal average_goals_by_season, @stat_tracker.average_goals_by_season
   end
 
+  def test_it_can_count_the_number_of_teams
+    assert_equal 29, @stat_tracker.count_of_teams
+  end
+
+  def test_it_can_determine_the_team_with_most_goals_across_all_seasons
+    assert_equal "FC Dallas", @stat_tracker.best_offense
+  end
+
+  def test_it_can_determine_the_team_with_least_goals_across_all_seasons
+    assert_equal "Sporting Kansas City", @stat_tracker.worst_offense
+  end
+
+  def test_it_can_find_the_best_defense
+    assert_equal "New England Revolution", @stat_tracker.best_defense
+  end
+
+  def test_it_can_find_the_best_defense
+    assert_equal "Toronto FC", @stat_tracker.worst_defense
+  end
+
+  def test_highest_scoring_visitor
+    assert_equal "FC Dallas", @stat_tracker.highest_scoring_visitor
+  end
+
+  def test_highest_scoring_home_team
+    assert_equal "FC Dallas", @stat_tracker.highest_scoring_home_team
+  end
+
+  def test_lowest_scoring_visitor
+    assert_equal "Sporting Kansas City", @stat_tracker.lowest_scoring_visitor
+  end
+
+  def test_lowest_scoring_home_team
+    assert_equal "Sporting Kansas City", @stat_tracker.lowest_scoring_home_team
+  end
+
+  def test_winningest_team # iteration-3-darren
+    assert_equal 'FC Dallas', @stat_tracker.winningest_team
+  end
+
+  def test_best_fans # iteration-3-darren
+    assert_equal "New England Revolution", @stat_tracker.best_fans
+  end
+
+  def test_worst_fans # iteration-3-darren
+    assert_equal ['FC Dallas'], @stat_tracker.worst_fans
+  end
 end

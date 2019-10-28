@@ -24,7 +24,7 @@ class Game
   def self.game_data
     @@game_data
   end
-  
+
   def self.parse_csv_data(file_path)
     output = []
     CSV.foreach(file_path, headers: :true, header_converters: :symbol) do |csv_row|
@@ -33,60 +33,52 @@ class Game
     self.assign_game_data(output)
   end
 
+  # Helper method to sum total score by game -> Returns array of Integers
+  def self.total_scores
+    @@game_data.map { |game| game.away_goals + game.home_goals }
+  end
+
+  # Highest sum of the winning and losing teams’ scores	-> returns Integer
   def self.highest_total_score
-    max_sum = 0
-    @@game_data.each do |game|
-      sum = game.away_goals.to_i + game.home_goals.to_i
-      if sum > max_sum
-        max_sum = sum
-      end
-    end
-    max_sum
+    self.total_scores.max_by { |score| score }
   end
 
+# Lowest sum of the winning and losing teams’ scores -> returns Integer
   def self.lowest_total_score
-    min_sum = 0
-    @@game_data.each do |game|
-      sum = game.away_goals.to_i + game.home_goals.to_i
-      if sum < min_sum
-        min_sum = sum
-      end
-    end
-    min_sum
+    self.total_scores.min_by { |score| score }
   end
 
+  # Helper method to get score differences of all games -> Returns array of Integers
+  def self.score_difference
+    @@game_data.map { |game| (game.away_goals - game.home_goals).abs}
+  end
+
+  # Highest difference between winner and loser	-> returns Integer
   def self.biggest_blowout
-    highest_difference = 0
-    @@game_data.each do |game|
-      difference = (game.away_goals.to_i - game.home_goals.to_i).abs
-      if difference > highest_difference
-        highest_difference = difference
-      end
-    end
-    highest_difference
+    self.score_difference.max_by { |difference| difference }
   end
 
-  def self.count_of_games_by_season
+  def self.count_of_games_by_season # iteration-2-darren
     season_count = Hash.new(0)
     @@game_data.each { |game| season_count[game.season] += 1 }
     season_count
   end
 
-  def self.average_goals_per_game
-    game_number = 0
-    goal_total = 0
-    @@game_data.each do |game|
-      game_number += 1
-      goal_total += game.away_goals + game.home_goals
-    end
-    (goal_total / game_number.to_f).round(2)
+  def self.average_goals_per_game # iteration-2-darren
+    (@@game_data.reduce(0) { |acc, game| acc + game.away_goals + game.home_goals } / @@game_data.count.to_f).round(2)
   end
 
-  def self.average_goals_by_season
+  def self.average_goals_by_season # iteration-2-darren
     season_average = Hash.new{|h,k| h[k] = []}
     @@game_data.each { |game| season_average[game.season] << (game.away_goals + game.home_goals) }
     season_average.each { |key, value| season_average[key] = (value.sum.to_f / value.length).round(2) }
   end
 
-end
+  def self.opponent_goals_average(lowest = true)
+    team_average =  Hash[@@game_data.map { |game| [game.home_team_id, []]}]
+    @@game_data.each { |game| team_average[game.home_team_id] << game.away_goals}
+    team_average.each { |key, value| team_average[key] = (value.sum.to_f / value.length).round(2) }
+    lowest ? team_average.min_by { |team, avg_opponent_goals| avg_opponent_goals}[0] : team_average.max_by { |team, avg_opponent_goals| avg_opponent_goals}[0]
+  end
 
+end
