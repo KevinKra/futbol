@@ -48,9 +48,9 @@ class Result
     outcome_percentage.round(2)
   end
 
-  def self.find_team_name(id)
-    @@game
-  end
+  # def self.find_team_name(id)
+  #   @@game
+  # end
 
   def self.find_best_offense(average = true)
     teams = Hash[@@result_data.map { |result| [result.team_id, []]}]
@@ -58,7 +58,7 @@ class Result
     teams.each { |key, value| teams[key] = (value.sum.to_f / value.length).round(2) }
     average ? teams.max_by {|team, goals_average| goals_average}[0] : teams.min_by {|team, goals_average| goals_average}[0]
   end
-  
+
   # Helper method to generate average scores by team by type -> Returns nested Hash
   def self.average_scores(type)
     team_average = Hash.new{ |hash,k| hash[k] = Hash.new(0) }
