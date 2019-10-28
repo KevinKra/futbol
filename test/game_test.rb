@@ -37,6 +37,12 @@ class GameTest < Minitest::Test
   def test_biggest_blowout
     assert_equal 3, Game.biggest_blowout
   end
+  
+  def test_it_determine_lowest_average_opponent_goals
+    assert_equal "16", Game.opponent_goals_average
+  end
 
-
+  def test_it_determine_highest_average_opponent_goals
+    assert_equal "20", Game.opponent_goals_average(false)
+  end
 end

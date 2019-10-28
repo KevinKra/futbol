@@ -2,8 +2,10 @@ require 'csv'
 require_relative './game'
 require_relative './team'
 require_relative './result'
+require_relative '../helpers/helpers.rb'
 
 class StatTracker
+  include Helpers
 
   def self.from_csv(location_paths)
     result_data = Result.parse_csv_data(location_paths[:results])
@@ -46,6 +48,26 @@ class StatTracker
 
   def average_goals_by_season # iteration-2-darren
     Game.average_goals_by_season
+  end
+
+  def count_of_teams
+    Team.count_of_teams
+  end
+
+  def best_offense
+    find_team_name(Result.find_best_offense, Team.team_data)
+  end
+
+  def worst_offense
+    find_team_name(Result.find_best_offense(false), Team.team_data)
+  end
+
+  def best_defense
+    find_team_name(Game.opponent_goals_average, Team.team_data)
+  end
+
+  def worst_defense
+    find_team_name(Game.opponent_goals_average(false), Team.team_data)
   end
   
   def highest_scoring_visitor

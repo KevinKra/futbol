@@ -52,6 +52,13 @@ class Result
     @@game
   end
 
+  def self.find_best_offense(average = true)
+    teams = Hash[@@result_data.map { |result| [result.team_id, []]}]
+    @@result_data.each { |result| teams[result.team_id] << result.goals}
+    teams.each { |key, value| teams[key] = (value.sum.to_f / value.length).round(2) }
+    average ? teams.max_by {|team, goals_average| goals_average}[0] : teams.min_by {|team, goals_average| goals_average}[0]
+  end
+  
   # Helper method to generate average scores by team by type -> Returns nested Hash
   def self.average_scores(type)
     team_average = Hash.new{ |hash,k| hash[k] = Hash.new(0) }
@@ -93,7 +100,7 @@ class Result
     team_average.min_by {|key, value| value[:average_goals] }[0]
   end
 
-  def self.winningest_team  # iteration-3-darren
+ def self.winningest_team  # iteration-3-darren
   winningest = Hash.new { |hash, key| hash[key] = Hash.new(0) }
   @@result_data.each do |result|
     winningest[result.team_id][:nr_games_played] += 1
@@ -101,9 +108,9 @@ class Result
     winningest[result.team_id][:win_percentage] = (winningest[result.team_id][:nr_games_won] / winningest[result.team_id][:nr_games_played].to_f*100).round(2) if winningest[result.team_id][:nr_games_won] > 0
   end
   winningest.max_by { |key, value| value[:win_percentage] }[0]
-  end
+ end
 
-  def self.best_worst_fans # iteration-3-darren helper method for best_fans and worst_fans
+ def self.best_worst_fans # iteration-3-darren helper method for best_fans and worst_fans
   best_worst = Hash.new { |hash, key| hash[key] = Hash.new(0) }
   @@result_data.each do |result|
     if result.hoa == 'home'
@@ -116,7 +123,8 @@ class Result
       best_worst[result.team_id][:win_pct_away] = (best_worst[result.team_id][:games_won_away] / best_worst[result.team_id][:games_played_away].to_f * 100).round(2)
     end
     best_worst[result.team_id][:diff_home_away_win_pct] = (best_worst[result.team_id][:win_pct_home] - best_worst[result.team_id][:win_pct_away]).round(2)
-  end
+   end
   best_worst
+ end
 
 end

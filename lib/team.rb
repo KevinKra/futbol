@@ -1,3 +1,5 @@
+require 'csv'
+
 class Team
   @@team_data = []
 
@@ -31,6 +33,10 @@ class Team
       output << Team.new(csv_row)
     end
     self.assign_team_data(output)
+  end
+
+  def self.count_of_teams
+    @@team_data.length
   end
 
   def self.lookup_team_name(team_id)

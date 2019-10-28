@@ -62,7 +62,6 @@ class StatTrackerTest < Minitest::Test
     assert_equal 4.24, @stat_tracker.average_goals_per_game
   end
 
-
   def test_average_goals_by_season  # iteration-2-darren
     average_goals_by_season = {
       '20122013' =>	4.2,
@@ -71,6 +70,26 @@ class StatTrackerTest < Minitest::Test
       '20162017' =>	4.75,
     }
     assert_equal average_goals_by_season, @stat_tracker.average_goals_by_season
+  end
+
+  def test_it_can_count_the_number_of_teams
+    assert_equal 29, @stat_tracker.count_of_teams
+  end
+
+  def test_it_can_determine_the_team_with_most_goals_across_all_seasons
+    assert_equal "Houston Dynamo", @stat_tracker.best_offense
+  end
+
+  def test_it_can_determine_the_team_with_least_goals_across_all_seasons
+    assert_equal "FC Dallas", @stat_tracker.worst_offense
+  end
+
+  def test_it_can_find_the_best_defense
+    assert_equal "New England Revolution", @stat_tracker.best_defense
+  end
+
+  def test_it_can_find_the_best_defense
+    assert_equal "Toronto FC", @stat_tracker.worst_defense
   end
 
   def test_highest_scoring_visitor
