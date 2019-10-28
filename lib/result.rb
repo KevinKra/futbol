@@ -121,5 +121,23 @@ class Result
     @@result_data.min_by { |result| result.goals }.goals
   end
 
+  # Name of the opponent that has the lowest win percentage against
+  # the given team. -> Returns String
+
+  def self.all_opponent_win_percentages(id)
+    win_percentages = Hash.new
+    @@result_data.each do |result|
+      team_id == id
+    win_percentages[team_id] = result.fowp
+
+  end
+
+
+  # def self.favorite_opponent
+  #   win_percentages = []
+  #   @@result_data.each do |game|
+  #     game.team
+  #   end
+
 
 end
