@@ -105,7 +105,7 @@ class StatTrackerTest < Minitest::Test
   end
 
   def test_lowest_scoring_home_team
-    assert_equal "Sporting Kansas City", @stat_tracker.lowest_scoring_home_team
+    assert_equal "Portland Timbers", @stat_tracker.lowest_scoring_home_team
   end
 
   def test_winningest_team # iteration-3-darren
@@ -117,6 +117,7 @@ class StatTrackerTest < Minitest::Test
   end
 
   def test_worst_fans # iteration-3-darren
-    assert_equal ['FC Dallas'], @stat_tracker.worst_fans
+    assert_equal ['Portland Timbers'], @stat_tracker.worst_fans
   end
+
 end

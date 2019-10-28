@@ -8,7 +8,8 @@ class StatTracker
   include Helpers
 
   def self.from_csv(location_paths)
-    result_data = Result.parse_csv_data(location_paths[:results])
+    # result_data = Result.parse_csv_data(location_paths[:results])
+    result_data = Result.parse_csv_data(location_paths[:game_teams])
     game_data = Game.parse_csv_data(location_paths[:games])
     team_data = Team.parse_csv_data(location_paths[:teams])
     StatTracker.new
@@ -69,7 +70,7 @@ class StatTracker
   def worst_defense
     find_team_name(Game.opponent_goals_average(false), Team.team_data)
   end
-  
+
   def highest_scoring_visitor
     highest_average = Result.highest_scoring_visitor
     Team.lookup_team_name(highest_average)
@@ -89,7 +90,7 @@ class StatTracker
     lowest_average = Result.lowest_scoring_home_team
     Team.lookup_team_name(lowest_average)
   end
-  
+
    def winningest_team # iteration-3-darren
     id_best_team = Result.winningest_team
     Team.lookup_team_name(id_best_team)
