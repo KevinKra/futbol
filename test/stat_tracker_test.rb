@@ -37,7 +37,7 @@ class StatTrackerTest < Minitest::Test
   end
 
   def test_it_can_return_a_percentage_of_home_games_won
-    assert_equal 66.67, @stat_tracker.percentage_home_wins(6)
+    assert_equal 100.0, @stat_tracker.percentage_home_wins(6)
   end
 
   def test_it_can_return_a_percentage_of_away_games_won
@@ -45,7 +45,7 @@ class StatTrackerTest < Minitest::Test
   end
 
   def test_it_can_return_a_percentage_of_games_tied
-    assert_equal 33.33, @stat_tracker.percentage_ties(3)
+    assert_equal 0.0, @stat_tracker.percentage_ties(3)
   end
 
   def test_count_of_games_by_season  # iteration-2-darren
@@ -77,11 +77,11 @@ class StatTrackerTest < Minitest::Test
   end
 
   def test_it_can_determine_the_team_with_most_goals_across_all_seasons
-    assert_equal "Houston Dynamo", @stat_tracker.best_offense
+    assert_equal "FC Dallas", @stat_tracker.best_offense
   end
 
   def test_it_can_determine_the_team_with_least_goals_across_all_seasons
-    assert_equal "FC Dallas", @stat_tracker.worst_offense
+    assert_equal "Sporting Kansas City", @stat_tracker.worst_offense
   end
 
   def test_it_can_find_the_best_defense
@@ -93,7 +93,7 @@ class StatTrackerTest < Minitest::Test
   end
 
   def test_highest_scoring_visitor
-    assert_equal "Houston Dynamo", @stat_tracker.highest_scoring_visitor
+    assert_equal "FC Dallas", @stat_tracker.highest_scoring_visitor
   end
 
   def test_highest_scoring_home_team
@@ -101,18 +101,19 @@ class StatTrackerTest < Minitest::Test
   end
 
   def test_lowest_scoring_visitor
-    assert_equal "FC Dallas", @stat_tracker.lowest_scoring_visitor
+    assert_equal "Sporting Kansas City", @stat_tracker.lowest_scoring_visitor
   end
 
   def test_lowest_scoring_home_team
-    assert_equal "FC Dallas", @stat_tracker.lowest_scoring_home_team
-  
+    assert_equal "Sporting Kansas City", @stat_tracker.lowest_scoring_home_team
+  end
+
   def test_winningest_team # iteration-3-darren
     assert_equal 'FC Dallas', @stat_tracker.winningest_team
   end
 
   def test_best_fans # iteration-3-darren
-    assert_equal 'Houston Dynamo', @stat_tracker.best_fans
+    assert_equal "New England Revolution", @stat_tracker.best_fans
   end
 
   def test_worst_fans # iteration-3-darren
