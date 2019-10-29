@@ -1,13 +1,13 @@
-require './lib/stat_tracker'
+require_relative './stat_tracker'
 
 game_path = './data/games.csv'
 team_path = './data/teams.csv'
-result_path = './data/results.csv'
+result_path = './data/game_teams.csv'
 
 locations = {
   games: game_path,
   teams: team_path,
-  results: result_path
+  game_teams: result_path
 }
 
 stat_tracker = StatTracker.from_csv(locations)

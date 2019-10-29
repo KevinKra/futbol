@@ -37,12 +37,39 @@ class GameTest < Minitest::Test
   def test_biggest_blowout
     assert_equal 3, Game.biggest_blowout
   end
-  
-  def test_it_determine_lowest_average_opponent_goals
-    assert_equal "16", Game.opponent_goals_average
+ 
+  def test_it_determines_lowest_average_opponent_goals
+    assert_equal "5", Game.opponent_goals_average
   end
 
-  def test_it_determine_highest_average_opponent_goals
+  def test_it_determines_highest_average_opponent_goals
     assert_equal "20", Game.opponent_goals_average(false)
   end
+
+  def test_it_can_find_a_teams_best_and_worst_season
+    assert_equal "20142015", Game.season_outcome("16")
+    assert_equal "20122013", Game.season_outcome("16", true)
+  end
+
+  def test_it_can_find_the_average_win_percentage_per_team
+    assert_equal 0.64, Game.average_win_percentage("16")
+    assert_equal 0, Game.average_win_percentage("3")
+  end
+
+  def test_it_can_get_all_opponents_of_given_team
+    assert_equal 2, Game.opponents_by_team("16").count
+  end
+
+  def test_favorite_opponent_for_particular_team
+    assert_equal "14", Game.favorite_opponent("16")
+  end
+
+  def test_rival_for_particular_team
+    assert_equal "26", Game.rival("16")
+  end
+
+  def test_get_opponent_for_particular_team
+    assert_equal "26", Game.get_opponent("16", "26", "16")
+  end
+
 end
