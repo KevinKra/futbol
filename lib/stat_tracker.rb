@@ -67,6 +67,7 @@ class StatTracker
 
   def worst_defense
     find_team_name(Game.opponent_goals_average(false), Team.team_data)
+    # Game.opponent_goals_average(false)
   end
 
   def best_season(team_id)

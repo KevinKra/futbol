@@ -39,7 +39,7 @@ class GameTest < Minitest::Test
   end
   
   def test_it_determines_lowest_average_opponent_goals
-    assert_equal "16", Game.opponent_goals_average
+    assert_equal "5", Game.opponent_goals_average
   end
 
   def test_it_determines_highest_average_opponent_goals
