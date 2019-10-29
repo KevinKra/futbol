@@ -78,18 +78,26 @@ class StatTracker
   end
 
   def lowest_scoring_visitor
-    Result.lowest_scoring_visitor
+    find_team_name(Result.lowest_scoring_visitor, Team.team_data)
   end
 
   def highest_scoring_visitor
-    Result.highest_scoring_visitor
+    find_team_name(Result.highest_scoring_visitor, Team.team_data)
   end
 
   def highest_scoring_home_team
-    Result.highest_scoring_home_team
+    find_team_name(Result.highest_scoring_home_team, Team.team_data)
+  end
+
+  def winningest_team
+    find_team_name(Result.winningest_team, Team.team_data)
   end
 
   def lowest_scoring_home_team
-    Result.lowest_scoring_home_team
+    find_team_name(Result.lowest_scoring_home_team, Team.team_data)
+  end
+
+  def team_info(team_id)
+    Team.team_info(team_id)
   end
 end

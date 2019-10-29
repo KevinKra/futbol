@@ -101,7 +101,6 @@ class StatTrackerTest < Minitest::Test
   end
 
   def test_lowest_scoring_visitor
-    skip
     assert_equal "Sporting Kansas City", @stat_tracker.lowest_scoring_visitor
   end
 
@@ -129,5 +128,16 @@ class StatTrackerTest < Minitest::Test
 
   def test_worst_season
     assert_equal "20122013", @stat_tracker.worst_season("16")
+  end
+
+  def test_team_info
+    expected = {"team_id"=>"1", 
+      "franchise_id"=>"23", 
+      "team_name"=>"Atlanta United", 
+      "abbreviation"=>"ATL", 
+      "stadium"=>"Mercedes-Benz Stadium", 
+      "link"=>"/api/v1/teams/1"}
+
+    assert_equal expected, Team.team_info("1")
   end
 end
