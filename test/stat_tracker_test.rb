@@ -37,11 +37,11 @@ class StatTrackerTest < Minitest::Test
   end
 
   def test_it_can_return_a_percentage_of_home_games_won
-    assert_equal 0.6, @stat_tracker.percentage_home_wins
+    assert_equal 0.55, @stat_tracker.percentage_home_wins
   end
 
   def test_it_can_return_a_percentage_of_away_games_won
-    assert_equal 0.4, @stat_tracker.percentage_visitor_wins
+    assert_equal 0.5, @stat_tracker.percentage_visitor_wins
   end
 
   def test_it_can_return_a_percentage_of_games_tied
@@ -49,11 +49,10 @@ class StatTrackerTest < Minitest::Test
   end
 
   def test_count_of_games_by_season  # iteration-2-darren
-    skip
     games_by_season = {
       '20122013' =>	5,
       '20142015' =>	6,
-      '20152016' =>	6,
+      '20152016' =>	5,
       '20162017' =>	4,
     }
     assert_equal games_by_season, @stat_tracker.count_of_games_by_season
@@ -64,11 +63,10 @@ class StatTrackerTest < Minitest::Test
   end
 
   def test_average_goals_by_season  # iteration-2-darren
-    skip
     average_goals_by_season = {
       '20122013' =>	4.2,
       '20142015' =>	3.5,
-      '20152016' =>	4.67,
+      '20152016' =>	4.6,
       '20162017' =>	4.75,
     }
     assert_equal average_goals_by_season, @stat_tracker.average_goals_by_season
@@ -148,10 +146,10 @@ class StatTrackerTest < Minitest::Test
   end
 
   def test_team_info #iteration-4-kevin
-    expected = {"team_id"=>"1", 
-      "franchise_id"=>"23", 
-      "team_name"=>"Atlanta United", 
-      "abbreviation"=>"ATL", 
+    expected = {"team_id"=>"1",
+      "franchise_id"=>"23",
+      "team_name"=>"Atlanta United",
+      "abbreviation"=>"ATL",
       "link"=>"/api/v1/teams/1"}
 
     assert_equal expected, Team.team_info("1")
