@@ -48,10 +48,6 @@ class Result
     outcome_percentage.round(2)
   end
 
-  # def self.find_team_name(id)
-  #   @@game
-  # end
-
   def self.find_best_offense(average = true)
     teams = Hash[@@result_data.map { |result| [result.team_id, []]}]
     @@result_data.each { |result| teams[result.team_id] << result.goals}
