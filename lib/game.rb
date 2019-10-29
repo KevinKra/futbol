@@ -34,11 +34,18 @@ class Game
   end
 
   def self.season_outcome(team_id, worst = false)
-    team_data = @@game_data.select { |game| game if game.home_team_id == team_id }
+    team_data = @@game_data.select do |game| 
+      game if game.home_team_id == team_id || game.away_team_id == team_id
+    end
     season_avg =  Hash[team_data.map { |game| [game.season, []]}]
     team_data.each do |game|
-      game.home_goals > game.away_goals ? season_avg[game.season] << 1 
-      : season_avg[game.season] << 0
+      if game.home_team_id == team_id
+       game.home_goals > game.away_goals ? season_avg[game.season] << 1 
+        : season_avg[game.season] << 0
+      else game.away_team_id == team_id
+        game.away_goals > game.home_goals ? season_avg[game.season] << 1 
+        : season_avg[game.season] << 0
+      end
     end
     season_avg.each { |key, value| season_avg[key] = (value.sum.to_f / value.length).round(2) }
     worst ? season_avg.min_by { |season, avg| avg}[0] : season_avg.max_by { |team, avg| avg}[0]
@@ -99,15 +106,17 @@ class Game
   end
 
   def self.average_win_percentage(team_id)
-    results = @@game_data.reduce([]) do |accum, game|
+    total = @@game_data.reduce([]) do |accum, game|
       if game.home_team_id == team_id
-        game.home_goals > game.away_goals ? accum.push("win") : accum.push("loss")
-      elsif game.away_team_id == team_id
-        game.away_goals > game.home_goals ? accum.push("win") : accum.push("loss")
+        game.home_goals > game.away_goals ? accum << "win" : accum << "loss"
+      end
+      if game.away_team_id == team_id
+        game.away_goals > game.home_goals ? accum << "win" : accum << "loss"
       end
       accum
     end
-    output = (results.length.to_f / (results.select {|result| result == "win" }).length.to_f).round(2)
+    games_won = total.select {|result| result == "win" }.length.to_f
+    output = (games_won / total.length.to_f).round(2)
     output.finite? == false ? 0 : output
   end
 

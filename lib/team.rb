@@ -50,7 +50,6 @@ class Team
       "franchise_id" => team.franchise_id, 
       "team_name" => team.team_name, 
       "abbreviation" => team.abbreviation, 
-      "stadium" => team.stadium, 
       "link" => team.link
     }
   end
