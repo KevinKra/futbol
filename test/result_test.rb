@@ -52,4 +52,18 @@ class ResultTest < Minitest::Test
     assert_equal "5", Result.find_best_offense(false)
   end
 
+  def test_it_can_get_all_goals_scored_by_team
+    assert_equal 9, Result.all_goals_scored("6").length
+    assert_equal ["2012030221", 3], Result.all_goals_scored("6").first
+  end
+
+  def test_most_goals_scored_for_particular_team
+    assert_equal 4, Result.most_goals_scored("6")
+  end
+
+  def test_least_goals_scored_for_particular_team
+    assert_equal 1, Result.fewest_goals_scored("6")
+  end
+
+
 end

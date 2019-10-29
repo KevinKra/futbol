@@ -124,15 +124,15 @@ class StatTrackerTest < Minitest::Test
     assert_equal ['FC Dallas'], @stat_tracker.worst_fans
   end
 
-  def test_best_season
+  def test_best_season #iteration-4-kevin
     assert_equal "20142015", @stat_tracker.best_season("16")
   end
 
-  def test_worst_season
+  def test_worst_season #iteration-4-kevin
     assert_equal "20122013", @stat_tracker.worst_season("16")
   end
 
-  def test_team_info
+  def test_team_info #iteration-4-kevin
     expected = {"team_id"=>"1", 
       "franchise_id"=>"23", 
       "team_name"=>"Atlanta United", 
@@ -143,8 +143,24 @@ class StatTrackerTest < Minitest::Test
   end
 
   # duplicate to game tests
-  def test_average_win_percentage
+  def test_average_win_percentage #iteration-4-kevin
     assert_equal 0.64, @stat_tracker.average_win_percentage("16")
     assert_equal 0, @stat_tracker.average_win_percentage("3")
+  end
+
+  def test_most_goals_scored #iteration-4-melissa
+    assert_equal 4, @stat_tracker.most_goals_scored("6")
+  end
+
+  def test_fewest_goals_scored #iteration-4-melissa
+    assert_equal 1, @stat_tracker.fewest_goals_scored("6")
+  end
+
+  def test_favorite_opponent #iteration-4-melissa
+    assert_equal "DC United", @stat_tracker.favorite_opponent("16")
+  end
+
+  def test_rival #iteration-4-melissa
+    assert_equal "FC Cincinnati", @stat_tracker.rival("16")
   end
 end
