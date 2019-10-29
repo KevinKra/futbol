@@ -15,12 +15,12 @@ class ResultTest < Minitest::Test
 
   def test_it_has_the_correct_data_amount
     total_data = Result.result_data
-    assert_equal 20, total_data.length
+    assert_equal 23, total_data.length
   end
 
   def test_global_result_percentages
-    assert_equal 0.6, Result.global_result_percentages("home", "WIN")
-    assert_equal 0.4, Result.global_result_percentages("away", "WIN")
+    assert_equal 0.55, Result.global_result_percentages("home", "WIN")
+    assert_equal 0.5, Result.global_result_percentages("away", "WIN")
     assert_equal 0.0, Result.global_result_percentages("away", "TIE")
   end
 
@@ -41,7 +41,7 @@ class ResultTest < Minitest::Test
   end
 
   def test_lowest_scoring_home_team
-    assert_equal "5", Result.lowest_scoring_home_team
+    assert_equal "15", Result.lowest_scoring_home_team
   end
 
   def test_it_can_determine_the_team_with_most_goals_across_all_seasons
