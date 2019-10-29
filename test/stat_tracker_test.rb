@@ -119,4 +119,20 @@ class StatTrackerTest < Minitest::Test
   def test_worst_fans # iteration-3-darren
     assert_equal ['FC Dallas'], @stat_tracker.worst_fans
   end
+
+  def test_most_goals_scored
+    assert_equal 4, @stat_tracker.most_goals_scored("6")
+  end
+
+  def test_fewest_goals_scored
+    assert_equal 1, @stat_tracker.fewest_goals_scored("6")
+  end
+
+  def test_favorite_opponent
+    assert_equal "DC United", @stat_tracker.favorite_opponent("16")
+  end
+
+  def test_rival
+    assert_equal "FC Cincinnati", @stat_tracker.rival("16")
+  end
 end
