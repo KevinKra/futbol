@@ -14,15 +14,15 @@ class StatTracker
     StatTracker.new
   end
 
-  def highest_total_score
+  def highest_total_score #iteration-2-melissa
     Game.highest_total_score
   end
 
-  def lowest_total_score
+  def lowest_total_score #iteration-2-melissa
     Game.lowest_total_score
   end
 
-  def biggest_blowout
+  def biggest_blowout #iteration-2-melissa
     Game.biggest_blowout
   end
 
@@ -70,22 +70,22 @@ class StatTracker
     find_team_name(Game.opponent_goals_average(false), Team.team_data)
   end
 
-  def highest_scoring_visitor
+  def highest_scoring_visitor #iteration-3-melissa
     highest_average = Result.highest_scoring_visitor
     Team.lookup_team_name(highest_average)
   end
 
-  def highest_scoring_home_team
+  def highest_scoring_home_team #iteration-3-melissa
     highest_average = Result.highest_scoring_home_team
     Team.lookup_team_name(highest_average)
   end
 
-  def lowest_scoring_visitor
+  def lowest_scoring_visitor #iteration-3-melissa
     lowest_average = Result.lowest_scoring_visitor
     Team.lookup_team_name(lowest_average)
   end
 
-  def lowest_scoring_home_team
+  def lowest_scoring_home_team #iteration-3-melissa
     lowest_average = Result.lowest_scoring_home_team
     Team.lookup_team_name(lowest_average)
   end
@@ -105,12 +105,22 @@ class StatTracker
     team_names = team_ids.map { |team_id| Team.lookup_team_name(team_id) }
   end
 
-  def most_goals_scored(team_id)
+  def most_goals_scored(team_id) #iteration-4-melissa
      Result.all_goals_scored(team_id).max_by { |key, value| value }[1]
     end
 
-  def fewest_goals_scored(team_id)
+  def fewest_goals_scored(team_id) #iteration-4-melissa
     Result.all_goals_scored(team_id).min_by { |key, value| value }[1]
+  end
+
+  def favorite_opponent(team_id) #iteration-4-melissa
+    fav_opponent = Game.favorite_opponent(team_id)
+    Team.lookup_team_name(fav_opponent)
+  end
+
+  def rival(team_id) #iteration-4-melissa
+    rival_opponent = Game.rival(team_id)
+    Team.lookup_team_name(rival_opponent)
   end
 
 end
