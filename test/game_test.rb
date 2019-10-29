@@ -50,4 +50,9 @@ class GameTest < Minitest::Test
     assert_equal "20142015", Game.season_outcome("16")
     assert_equal "20122013", Game.season_outcome("16", true)
   end
+
+  def test_it_can_find_the_average_win_percentage_per_team
+    assert_equal 1.57, Game.average_win_percentage("16")
+    assert_equal 0, Game.average_win_percentage("3")
+  end
 end

@@ -86,11 +86,24 @@ class Game
     season_average.each { |key, value| season_average[key] = (value.sum.to_f / value.length).round(2) }
   end
 
-  def self.opponent_goals_average(lowest = true)
+  def self.opponent_goals_average(lowest = true) #it-4-kevin
     team_average =  Hash[@@game_data.map { |game| [game.home_team_id, []]}]
     @@game_data.each { |game| team_average[game.home_team_id] << game.away_goals}
     team_average.each { |key, value| team_average[key] = (value.sum.to_f / value.length).round(2) }
     lowest ? team_average.min_by { |team, avg_opponent_goals| avg_opponent_goals}[0] : team_average.max_by { |team, avg_opponent_goals| avg_opponent_goals}[0]
+  end
+
+  def self.average_win_percentage(team_id)
+    results = @@game_data.reduce([]) do |accum, game|
+      if game.home_team_id == team_id
+        game.home_goals > game.away_goals ? accum.push("win") : accum.push("loss")
+      elsif game.away_team_id == team_id
+        game.away_goals > game.home_goals ? accum.push("win") : accum.push("loss")
+      end
+      accum
+    end
+    output = (results.length.to_f / (results.select {|result| result == "win" }).length.to_f).round(2)
+    output.finite? == false ? 0 : output
   end
 
 end
