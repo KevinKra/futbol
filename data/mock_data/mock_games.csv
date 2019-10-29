@@ -19,4 +19,3 @@ game_id,season,type,date_time,away_team_id,home_team_id,away_goals,home_goals,ve
 2015030143,20152016,Postseason,4/19/16,5,3,3,1,BBVA Stadium,/api/v1/venues/null
 2015030144,20152016,Postseason,4/21/16,5,3,3,0,BBVA Stadium,/api/v1/venues/null
 2015030145,20152016,Postseason,4/23/16,3,5,3,4,Children's Mercy Park,/api/v1/venues/null
-2015030181,20152016,Postseason,4/15/16,28,26,2,3,Nippert Stadium,/api/v1/venues/null
