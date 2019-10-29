@@ -101,6 +101,7 @@ class StatTrackerTest < Minitest::Test
   end
 
   def test_lowest_scoring_visitor
+    skip
     assert_equal "Sporting Kansas City", @stat_tracker.lowest_scoring_visitor
   end
 
@@ -113,10 +114,20 @@ class StatTrackerTest < Minitest::Test
   end
 
   def test_best_fans # iteration-3-darren
+    skip
     assert_equal "New England Revolution", @stat_tracker.best_fans
   end
 
   def test_worst_fans # iteration-3-darren
+    skip
     assert_equal ['FC Dallas'], @stat_tracker.worst_fans
+  end
+
+  def test_best_season
+    assert_equal "20142015", @stat_tracker.best_season("16")
+  end
+
+  def test_worst_season
+    assert_equal "20122013", @stat_tracker.worst_season("16")
   end
 end
