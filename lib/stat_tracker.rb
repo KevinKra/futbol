@@ -107,11 +107,11 @@ class StatTracker
   end
 
   def biggest_team_blowout(team_id) # iteration-4-darren
-    Game.biggest_team_blowout(team_id)
+    Game.best_worst_loss(team_id).max
   end
 
   def worst_loss(team_id) # iteration-4-darren
-    Game.worst_loss(team_id)
+    Game.best_worst_loss(team_id).min.abs
   end
 
   def head_to_head(team_id) # iteration-4-darren
@@ -125,6 +125,11 @@ class StatTracker
 
   def seasonal_summary(team_id) # iteration-4-darren
     Game.seasonal_summary(team_id)
+  end
+
+  def favorite_opponent(team_id)
+    opp_id = Game.favorite_opponent(team_id)
+    opp_name = Team.lookup_team_name(opp_id)
   end
 
 end
