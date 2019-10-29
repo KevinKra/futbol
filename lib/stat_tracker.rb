@@ -36,7 +36,7 @@ class StatTracker
   def percentage_ties #iteration-2-kevin
     Result.global_result_percentages("away", "TIE")
   end
-  
+
   def count_of_teams #iteration-2-kevin
     Team.count_of_teams
   end
@@ -68,7 +68,7 @@ class StatTracker
   def worst_defense #iteration-3-kevin
     find_team_name(Game.opponent_goals_average(false), Team.team_data)
   end
-  
+
   def lowest_scoring_visitor #iteration-3-melissa
     find_team_name(Result.lowest_scoring_visitor, Team.team_data)
   end
@@ -85,10 +85,20 @@ class StatTracker
     find_team_name(Result.winningest_team, Team.team_data)
   end
 
+  def best_fans # iteration-3-darren
+   best_fan_team_id = Result.best_worst_fans.max_by { |key, value| value[:diff_home_away_win_pct] }[0]
+   team_name = Team.lookup_team_name(best_fan_team_id)
+  end
+
+  def worst_fans # iteration-3-darren
+    team_ids = Result.best_worst_fans.keep_if { |key, value| value[:diff_home_away_win_pct] < 0 }.keys
+    team_names = team_ids.map { |team_id| Team.lookup_team_name(team_id) }
+  end
+
   def lowest_scoring_home_team #iteration-3-melissa
     find_team_name(Result.lowest_scoring_home_team, Team.team_data)
   end
-    
+
   def best_season(team_id) #iteration-4-kevin
     Game.season_outcome(team_id)
   end
@@ -133,7 +143,7 @@ class StatTracker
   def seasonal_summary(team_id) # iteration-4-darren
     Game.seasonal_summary(team_id)
   end
-  
+
   def favorite_opponent(team_id) #iteration-4-melissa
     find_team_name(Game.favorite_opponent(team_id), Team.team_data)
   end
@@ -141,5 +151,5 @@ class StatTracker
   def rival(team_id) #iteration-4-melissa
     find_team_name(Game.rival(team_id), Team.team_data)
   end
- 
+
 end
