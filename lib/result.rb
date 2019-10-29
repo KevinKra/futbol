@@ -150,9 +150,4 @@ class Result
     self.all_goals_scored(team_id).min_by { |key, value| value }[1]
    end
 
- # Name of the opponent that has the lowest win percentage against
- # the given team. -> Returns String
- # def self.favorite_opponent(team_id)
- # end
-
 end
