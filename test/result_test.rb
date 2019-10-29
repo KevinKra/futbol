@@ -18,10 +18,10 @@ class ResultTest < Minitest::Test
     assert_equal 20, total_data.length
   end
 
-  def test_that_games_by_team_id_works_correctly
-    assert_equal 100.0, Result.games_by_team_id(6, "home", "WIN")
-    assert_equal 100, Result.games_by_team_id(6, "away", "WIN")
-    assert_equal 0.0, Result.games_by_team_id(3, "away", "TIE")
+  def test_global_result_percentages
+    assert_equal 0.6, Result.global_result_percentages("home", "WIN")
+    assert_equal 0.4, Result.global_result_percentages("away", "WIN")
+    assert_equal 0.0, Result.global_result_percentages("away", "TIE")
   end
 
   def test_average_scores_by_type
@@ -51,5 +51,19 @@ class ResultTest < Minitest::Test
   def test_it_can_determine_the_team_with_least_goals_across_all_seasons
     assert_equal "5", Result.find_best_offense(false)
   end
+
+  def test_it_can_get_all_goals_scored_by_team
+    assert_equal 9, Result.all_goals_scored("6").length
+    assert_equal ["2012030221", 3], Result.all_goals_scored("6").first
+  end
+
+  def test_most_goals_scored_for_particular_team
+    assert_equal 4, Result.most_goals_scored("6")
+  end
+
+  def test_least_goals_scored_for_particular_team
+    assert_equal 1, Result.fewest_goals_scored("6")
+  end
+
 
 end

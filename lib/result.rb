@@ -1,7 +1,8 @@
 class Result
   @@result_data = []
 
-  attr_reader :team_id, :hoa, :result, :goals
+  attr_reader :team_id, :hoa, :result, :goals, :game_id
+
   def initialize(result_data)
     @game_id = result_data[:game_id]
     @team_id = result_data[:team_id]
@@ -36,21 +37,13 @@ class Result
     self.assign_result_data(output)
   end
 
-  def self.games_by_team_id(team_id, format, seek_result)
-    # team_id, format ("home", "away"), seek_result ("WIN", "LOSE", "TIE")
-    all_matching_games = @@result_data.select do |game|
-      game.team_id == team_id.to_s && game.hoa == format
-    end
-    matching_results = all_matching_games.select do |game|
-      game.result == seek_result
-    end.length
-    outcome_percentage = (matching_results.to_f / all_matching_games.length) * 100
+  def self.global_result_percentages(format, seek_result)
+    # format ("home", "away"), seek_result ("WIN", "LOSE", "TIE")
+    games = @@result_data.select { |game| game.hoa == format }
+    results = games.select { |game| game.result == seek_result }.length
+    outcome_percentage = (results.to_f / games.length)
     outcome_percentage.round(2)
   end
-
-  # def self.find_team_name(id)
-  #   @@game
-  # end
 
   def self.find_best_offense(average = true)
     teams = Hash[@@result_data.map { |result| [result.team_id, []]}]
@@ -79,22 +72,22 @@ class Result
     team_average.max_by {|key, value| value[:average_goals] }[0]
   end
 
-# Name of the team with the highest average score
-# per game across all seasons when they are home. -> Returns String
+  # Name of the team with the highest average score
+  # per game across all seasons when they are home. -> Returns String
   def self.highest_scoring_home_team
     team_average = self.average_scores("home")
     team_average.max_by {|key, value| value[:average_goals] }[0]
   end
 
-# Name of the team with the lowest average score
-# per game across all seasons when they are a visitor. -> Returns String
+  # Name of the team with the lowest average score
+  # per game across all seasons when they are a visitor. -> Returns String
   def self.lowest_scoring_visitor
     team_average = self.average_scores("away")
     team_average.min_by {|key, value| value[:average_goals] }[0]
   end
 
-# Name of the team with the lowest average score
-# per game across all seasons when they are at home.
+  # Name of the team with the lowest average score
+  # per game across all seasons when they are at home.
   def self.lowest_scoring_home_team
     team_average = self.average_scores("home")
     team_average.min_by {|key, value| value[:average_goals] }[0]
@@ -126,5 +119,27 @@ class Result
    end
   best_worst
  end
+
+  # Helper method to retrieve all_goals_scored by a particular team by game
+  # -> Returns Hash
+  def self.all_goals_scored(team_id)
+      @@result_data.reduce({}) do |all_goals, result|
+        all_goals[result.game_id] = result.goals if result.team_id == team_id
+        all_goals
+      end
+    end
+
+   # Highest number of goals a particular team has scored in a single game.
+   # -> Returns Integer
+   def self.most_goals_scored(team_id)
+    self.all_goals_scored(team_id).max_by { |key, value| value }[1]
+   end
+
+
+  # Lowest numer of goals a particular team has scored in a single game.
+  # -> Returns Integer
+   def self.fewest_goals_scored(team_id)
+    self.all_goals_scored(team_id).min_by { |key, value| value }[1]
+   end
 
 end
