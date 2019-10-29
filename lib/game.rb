@@ -33,6 +33,20 @@ class Game
     self.assign_game_data(output)
   end
 
+  # REFACTOR
+  def self.worst_loss(team_id)
+    difference = 0
+    @@game_data.each do |game|
+      if game.home_team_id == team_id
+        game_diff = (game.home_goals - game.away_goals).abs
+        if game_diff > difference
+          difference = game_diff
+        end
+      end
+    end
+    difference
+  end
+
   # Helper method to sum total score by game -> Returns array of Integers
   def self.total_scores
     @@game_data.map { |game| game.away_goals + game.home_goals }
