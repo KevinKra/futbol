@@ -68,7 +68,7 @@ class StatTracker
   def worst_defense #iteration-3-kevin
     find_team_name(Game.opponent_goals_average(false), Team.team_data)
   end
-
+  
   def lowest_scoring_visitor #iteration-3-melissa
     find_team_name(Result.lowest_scoring_visitor, Team.team_data)
   end
@@ -112,6 +112,27 @@ class StatTracker
   def fewest_goals_scored(team_id) #iteration-4-melissa
     Result.all_goals_scored(team_id).min_by { |key, value| value }[1]
   end
+
+  def biggest_team_blowout(team_id) # iteration-4-darren
+    Game.best_worst_loss(team_id).max
+  end
+
+  def worst_loss(team_id) # iteration-4-darren
+    Game.best_worst_loss(team_id).min.abs
+  end
+
+  def head_to_head(team_id) # iteration-4-darren
+    head_to_head = Game.head_to_head(team_id)
+    head_to_head_final = Hash.new()
+    head_to_head.each do |key, value|
+      head_to_head_final[Team.lookup_team_name(key)] = value
+    end
+    head_to_head_final
+  end
+
+  def seasonal_summary(team_id) # iteration-4-darren
+    Game.seasonal_summary(team_id)
+  end
   
   def favorite_opponent(team_id) #iteration-4-melissa
     find_team_name(Game.favorite_opponent(team_id), Team.team_data)
@@ -121,5 +142,4 @@ class StatTracker
     find_team_name(Game.rival(team_id), Team.team_data)
   end
  
-
 end

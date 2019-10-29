@@ -107,7 +107,7 @@ class StatTrackerTest < Minitest::Test
   end
 
   def test_lowest_scoring_home_team
-    assert_equal "Sporting Kansas City", @stat_tracker.lowest_scoring_home_team
+    assert_equal "Portland Timbers", @stat_tracker.lowest_scoring_home_team
   end
 
   def test_winningest_team # iteration-3-darren
@@ -115,13 +115,28 @@ class StatTrackerTest < Minitest::Test
   end
 
   def test_best_fans # iteration-3-darren
-    skip
     assert_equal "New England Revolution", @stat_tracker.best_fans
   end
 
   def test_worst_fans # iteration-3-darren
-    skip
-    assert_equal ['FC Dallas'], @stat_tracker.worst_fans
+    assert_equal ['Portland Timbers'], @stat_tracker.worst_fans
+  end
+
+  def test_biggest_team_blowout # iteration-4-darren
+    assert_equal 3, @stat_tracker.biggest_team_blowout('5')
+  end
+
+  def test_worst_loss # iteration-4-darren
+    assert_equal 2, @stat_tracker.worst_loss('14')
+  end
+
+  def test_head_to_head # iteration-4-darren
+    assert_equal ({"New England Revolution"=>0.17}), @stat_tracker.head_to_head('14')
+  end
+
+  def test_seasonal_summary # iteration-4-darren
+    seasonal = {"20142015"=>{:postseason=>{:total_goals_scored=>8, :total_goals_against=>13, :average_goals_scored=>1.33, :average_goals_against=>2.17, :win_percentage=>0.17}}}
+    assert_equal seasonal, @stat_tracker.seasonal_summary('14')
   end
 
   def test_best_season #iteration-4-kevin

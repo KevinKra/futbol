@@ -170,4 +170,106 @@ class Game
     return [away_goals, home_goals] if hoa == 'away'
   end
 
+  def self.best_worst_loss(team_id) # iteration-4-darren
+    select_games = select_games(team_id)
+    select_games.map do |game|
+      if team_id == game.home_team_id
+        game.home_goals - game.away_goals
+      else
+        game.away_goals - game.home_goals
+      end
+    end
+  end
+
+  def self.head_to_head(team_id) # iteration-4-darren
+    select_games = select_games(team_id)
+    head_to_head = Hash.new{ |hash, key| hash[key] = Hash.new(0) }
+    select_games.each do |game|
+      hoa = home_or_away(team_id, game.home_team_id, game.away_team_id)
+      home_away_goals = home_goals_away_goals(hoa, game.home_goals, game.away_goals)
+      home_goals = home_away_goals[0]
+      away_goals = home_away_goals[1]
+      oppon_id = get_opponent(team_id, game.home_team_id, game.away_team_id)
+      head_to_head[oppon_id][:nr_games_played] += 1
+      head_to_head[oppon_id][:nr_games_won] += 1 if home_goals > away_goals
+      head_to_head[oppon_id][:win_pct] = (head_to_head[oppon_id][:nr_games_won] / head_to_head[oppon_id][:nr_games_played].to_f).round(2)
+    end
+    head_to_head_final = Hash.new(0)
+    head_to_head.each { |key, value| head_to_head_final[key] = value[:win_pct] }
+    head_to_head_final
+  end
+
+  def self.get_opponent(team_id, home_team_id, away_team_id) # iteration-4-darren helper
+   if home_team_id == team_id
+     opponent_id = away_team_id
+   elsif away_team_id == team_id
+     opponent_id = home_team_id
+   end
+  end
+
+  def self.seasonal_summary(team_id) # iteration-4-darren
+    seasonal = nested_hash
+    select_games = select_games(team_id)
+    select_games.each do |game|
+      gm_season = game.season
+      gm_type = game_type(game.type)
+      hoa = home_or_away(team_id, game.home_team_id, game.away_team_id)
+      home_away_goals = home_goals_away_goals(hoa, game.home_goals, game.away_goals)
+      home_goals = home_away_goals[0]
+      away_goals = home_away_goals[1]
+      seasonal[gm_season][gm_type][:nr_games_played] += 1
+      seasonal[gm_season][gm_type][:nr_games_won] += 1 if home_goals > away_goals
+      seasonal[gm_season][gm_type][:total_goals_scored] += home_goals
+      seasonal[gm_season][gm_type][:total_goals_against] += away_goals
+      seasonal[gm_season][gm_type][:average_goals_scored] = (seasonal[gm_season][gm_type][:total_goals_scored] / seasonal[gm_season][gm_type][:nr_games_played].to_f).round(2)
+      seasonal[gm_season][gm_type][:average_goals_against] = (seasonal[gm_season][gm_type][:total_goals_against] / seasonal[gm_season][gm_type][:nr_games_played].to_f).round(2)
+      seasonal[gm_season][gm_type][:win_percentage] = (seasonal[gm_season][gm_type][:nr_games_won] / seasonal[gm_season][gm_type][:nr_games_played].to_f).round(2)
+    end
+    tidy_and_fix_hash(seasonal)
+  end
+
+  def self.nested_hash # iteration-4-darren helper
+    Hash.new{
+      |hash, key| hash[key] = Hash.new{
+        |nest_hash, nest_key| nest_hash[nest_key] = Hash.new(0) } }
+  end
+
+  def self.tidy_and_fix_hash(input_data) # iteration-4-darren helper
+    input_data.each do |key, value|
+      value.each do |nested_key, nested_value|
+        input_data[key][nested_key].delete(:nr_games_played)
+        input_data[key][nested_key].delete(:nr_games_won)
+      end
+      if value[:postseason].length == 0
+        input_data[key][:postseason][:total_goals_scored] = 0
+        input_data[key][:postseason][:total_goals_against] = 0
+        input_data[key][:postseason][:average_goals_scored] = 0
+        input_data[key][:postseason][:average_goals_against] = 0
+        input_data[key][:postseason][:win_percentage] = 0
+      end
+    end
+    input_data
+  end
+
+  def self.select_games(team_id) # iteration-4-darren helper method
+    select_games = @@game_data.find_all do |game|
+      team_id == game.home_team_id || team_id == game.away_team_id
+    end
+  end
+
+  def self.game_type(input_type) # iteration-4-darren helper
+    return :regular_season if input_type == 'Regular Season'
+    return :postseason if input_type == 'Postseason'
+  end
+
+  def self.home_or_away(team_id, home_team_id, away_team_id) # iteration-4-darren helper
+    return 'home' if team_id == home_team_id
+    return 'away' if team_id == away_team_id
+  end
+
+  def self.home_goals_away_goals(hoa, home_goals, away_goals) # iteration-4-darren helper
+    return [home_goals, away_goals] if hoa == 'home'
+    return [away_goals, home_goals] if hoa == 'away'
+  end
+
 end
