@@ -46,7 +46,11 @@ class GameTest < Minitest::Test
     assert_equal "20", Game.opponent_goals_average(false)
   end
 
-  def test_it_determines_biggest_loss_for_the_team
-    assert_equal 3, Game.worst_loss("3")
+  def test_it_can_find_a_teams_best_season
+    assert_equal "20142015", Game.season_outcome("16")
+  end
+
+  def test_it_can_find_a_teams_best_season
+    assert_equal "20122013", Game.season_outcome("16", true)
   end
 end

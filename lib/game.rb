@@ -33,19 +33,17 @@ class Game
     self.assign_game_data(output)
   end
 
-  # REFACTOR
-  def self.worst_loss(team_id)
-    difference = 0
-    @@game_data.each do |game|
-      if game.home_team_id == team_id
-        game_diff = (game.home_goals - game.away_goals).abs
-        if game_diff > difference
-          difference = game_diff
-        end
-      end
+  def self.season_outcome(team_id, worst = false)
+    team_data = @@game_data.select { |game| game if game.home_team_id == team_id }
+    season_avg =  Hash[team_data.map { |game| [game.season, []]}]
+    team_data.each do |game|
+      game.home_goals > game.away_goals ? season_avg[game.season] << 1 
+      : season_avg[game.season] << 0
     end
-    difference
+    season_avg.each { |key, value| season_avg[key] = (value.sum.to_f / value.length).round(2) }
+    worst ? season_avg.min_by { |season, avg| avg}[0] : season_avg.max_by { |team, avg| avg}[0]
   end
+ 
 
   # Helper method to sum total score by game -> Returns array of Integers
   def self.total_scores
