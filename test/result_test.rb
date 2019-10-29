@@ -65,5 +65,9 @@ class ResultTest < Minitest::Test
     assert_equal 1, Result.fewest_goals_scored("6")
   end
 
+  def test_it_can_find_favorite_opponent_for_particular_team
+    assert_equal "name", Result.favorite_opponent("6")
+  end
+
 
 end
