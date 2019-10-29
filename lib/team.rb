@@ -42,4 +42,16 @@ class Team
   def self.lookup_team_name(team_id)
     @@team_data.find { |team| team.team_id == team_id }.team_name
   end
+
+  def self.team_info(team_id)
+    team = @@team_data.find {|team| team.team_id == team_id}
+    {
+      "team_id" => team.team_id, 
+      "franchise_id" => team.franchise_id, 
+      "team_name" => team.team_name, 
+      "abbreviation" => team.abbreviation, 
+      "stadium" => team.stadium, 
+      "link" => team.link
+    }
+  end
 end
