@@ -2,7 +2,7 @@ class Result
   @@result_data = []
 
   attr_reader :team_id, :hoa, :result, :goals, :game_id
-  
+
   def initialize(result_data)
     @game_id = result_data[:game_id]
     @team_id = result_data[:team_id]
@@ -152,9 +152,7 @@ class Result
 
  # Name of the opponent that has the lowest win percentage against
  # the given team. -> Returns String
- def self.favorite_opponent(team_id)
- end
-
-
+ # def self.favorite_opponent(team_id)
+ # end
 
 end
