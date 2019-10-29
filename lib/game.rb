@@ -81,4 +81,54 @@ class Game
     lowest ? team_average.min_by { |team, avg_opponent_goals| avg_opponent_goals}[0] : team_average.max_by { |team, avg_opponent_goals| avg_opponent_goals}[0]
   end
 
+  # Helper method to get all opponents by team with win percentages
+  # -> Returns nested Hash
+  def self.opponents_by_team(team_id)
+    fav_opponent = Hash.new{ |hash,k| hash[k] = Hash.new(0) }
+    all_games = @@game_data.find_all { |game| game.home_team_id == team_id || game.away_team_id == team_id }
+    all_games.each do |game|
+      opponent_id = get_opponent(team_id, game.home_team_id, game.away_team_id)
+      hoa = home_or_away(team_id, game.home_team_id, game.away_team_id)
+      home_away_goals = home_goals_away_goals(hoa, game.home_goals, game.away_goals)
+      home_goals = home_away_goals[0]
+      away_goals = home_away_goals[1]
+      fav_opponent[opponent_id][:num_games] += 1
+      fav_opponent[opponent_id][:num_wins] += 1 if home_goals > away_goals
+      fav_opponent[opponent_id][:win_pct] = (fav_opponent[opponent_id][:num_wins] / fav_opponent[opponent_id][:num_games].to_f).round(2)
+    end
+    fav_opponent
+  end
+
+  # Name of the opponent that has the lowest win percentage against
+  # the given team. -> Returns String
+  def self.favorite_opponent(team_id)
+    all_opponents = self.opponents_by_team(team_id)
+    all_opponents.max_by { |key, value| value[:win_pct] }[0]
+  end
+  # Name of the opponent that has the highest win percentage against
+  # the given team. -> Returns String
+  def self.rival(team_id)
+    all_opponents = self.opponents_by_team(team_id)
+    all_opponents.min_by { |key, value| value[:win_pct] }[0]
+  end
+
+  # Helper method to get correct opponent ids from game_data
+  def self.get_opponent(team_id, home_team_id, away_team_id)
+    if home_team_id == team_id
+      opponent_id = away_team_id
+    elsif away_team_id == team_id
+      opponent_id = home_team_id
+    end
+  end
+
+  def self.home_or_away(team_id, home_team_id, away_team_id) # iteration-4-darren seasonal_summary helper
+    return 'home' if team_id == home_team_id
+    return 'away' if team_id == away_team_id
+  end
+
+  def self.home_goals_away_goals(hoa, home_goals, away_goals) # iteration-4-darren seasonal_summary helper
+    return [home_goals, away_goals] if hoa == 'home'
+    return [away_goals, home_goals] if hoa == 'away'
+  end
+
 end
