@@ -18,10 +18,10 @@ class ResultTest < Minitest::Test
     assert_equal 20, total_data.length
   end
 
-  def test_that_games_by_team_id_works_correctly
-    assert_equal 100.0, Result.games_by_team_id(6, "home", "WIN")
-    assert_equal 100, Result.games_by_team_id(6, "away", "WIN")
-    assert_equal 0.0, Result.games_by_team_id(3, "away", "TIE")
+  def test_global_result_percentages
+    assert_equal 0.6, Result.global_result_percentages("home", "WIN")
+    assert_equal 0.4, Result.global_result_percentages("away", "WIN")
+    assert_equal 0.0, Result.global_result_percentages("away", "TIE")
   end
 
   def test_average_scores_by_type

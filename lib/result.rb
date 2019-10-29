@@ -37,21 +37,13 @@ class Result
     self.assign_result_data(output)
   end
 
-  def self.games_by_team_id(team_id, format, seek_result)
-    # team_id, format ("home", "away"), seek_result ("WIN", "LOSE", "TIE")
-    all_matching_games = @@result_data.select do |game|
-      game.team_id == team_id.to_s && game.hoa == format
-    end
-    matching_results = all_matching_games.select do |game|
-      game.result == seek_result
-    end.length
-    outcome_percentage = (matching_results.to_f / all_matching_games.length) * 100
+  def self.global_result_percentages(format, seek_result)
+    # format ("home", "away"), seek_result ("WIN", "LOSE", "TIE")
+    games = @@result_data.select { |game| game.hoa == format }
+    results = games.select { |game| game.result == seek_result }.length
+    outcome_percentage = (results.to_f / games.length)
     outcome_percentage.round(2)
   end
-
-  # def self.find_team_name(id)
-  #   @@game
-  # end
 
   def self.find_best_offense(average = true)
     teams = Hash[@@result_data.map { |result| [result.team_id, []]}]

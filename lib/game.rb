@@ -33,6 +33,25 @@ class Game
     self.assign_game_data(output)
   end
 
+  def self.season_outcome(team_id, worst = false)
+    team_data = @@game_data.select do |game| 
+      game if game.home_team_id == team_id || game.away_team_id == team_id
+    end
+    season_avg =  Hash[team_data.map { |game| [game.season, []]}]
+    team_data.each do |game|
+      if game.home_team_id == team_id
+       game.home_goals > game.away_goals ? season_avg[game.season] << 1 
+        : season_avg[game.season] << 0
+      else game.away_team_id == team_id
+        game.away_goals > game.home_goals ? season_avg[game.season] << 1 
+        : season_avg[game.season] << 0
+      end
+    end
+    season_avg.each { |key, value| season_avg[key] = (value.sum.to_f / value.length).round(2) }
+    worst ? season_avg.min_by { |season, avg| avg}[0] : season_avg.max_by { |team, avg| avg}[0]
+  end
+ 
+
   # Helper method to sum total score by game -> Returns array of Integers
   def self.total_scores
     @@game_data.map { |game| game.away_goals + game.home_goals }
@@ -74,11 +93,31 @@ class Game
     season_average.each { |key, value| season_average[key] = (value.sum.to_f / value.length).round(2) }
   end
 
-  def self.opponent_goals_average(lowest = true)
+  def self.opponent_goals_average(lowest = true) #it-4-kevin
     team_average =  Hash[@@game_data.map { |game| [game.home_team_id, []]}]
     @@game_data.each { |game| team_average[game.home_team_id] << game.away_goals}
-    team_average.each { |key, value| team_average[key] = (value.sum.to_f / value.length).round(2) }
-    lowest ? team_average.min_by { |team, avg_opponent_goals| avg_opponent_goals}[0] : team_average.max_by { |team, avg_opponent_goals| avg_opponent_goals}[0]
+    @@game_data.each { |game| team_average[game.away_team_id] << game.home_goals}
+    team_average.each { |key, value| team_average[key] = (value.sum.to_f / value.length.to_f).round(3) }
+    if lowest 
+      team_average.min_by { |team, avg_opponent_goals| avg_opponent_goals}[0]
+    else 
+      team_average.max_by { |team, avg_opponent_goals| avg_opponent_goals}[0]
+    end
+  end
+
+  def self.average_win_percentage(team_id)
+    total = @@game_data.reduce([]) do |accum, game|
+      if game.home_team_id == team_id
+        game.home_goals > game.away_goals ? accum << "win" : accum << "loss"
+      end
+      if game.away_team_id == team_id
+        game.away_goals > game.home_goals ? accum << "win" : accum << "loss"
+      end
+      accum
+    end
+    games_won = total.select {|result| result == "win" }.length.to_f
+    output = (games_won / total.length.to_f).round(2)
+    output.finite? == false ? 0 : output
   end
 
   # Helper method to get all opponents by team with win percentages

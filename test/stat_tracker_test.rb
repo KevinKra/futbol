@@ -37,18 +37,19 @@ class StatTrackerTest < Minitest::Test
   end
 
   def test_it_can_return_a_percentage_of_home_games_won
-    assert_equal 100.0, @stat_tracker.percentage_home_wins(6)
+    assert_equal 0.6, @stat_tracker.percentage_home_wins
   end
 
   def test_it_can_return_a_percentage_of_away_games_won
-    assert_equal 100, @stat_tracker.percentage_visitor_wins(6)
+    assert_equal 0.4, @stat_tracker.percentage_visitor_wins
   end
 
   def test_it_can_return_a_percentage_of_games_tied
-    assert_equal 0.0, @stat_tracker.percentage_ties(3)
+    assert_equal 0.0, @stat_tracker.percentage_ties
   end
 
   def test_count_of_games_by_season  # iteration-2-darren
+    skip
     games_by_season = {
       '20122013' =>	5,
       '20142015' =>	6,
@@ -59,10 +60,11 @@ class StatTrackerTest < Minitest::Test
   end
 
   def test_average_goals_per_game  # iteration-2-darren
-    assert_equal 4.24, @stat_tracker.average_goals_per_game
+    assert_equal 4.2, @stat_tracker.average_goals_per_game
   end
 
   def test_average_goals_by_season  # iteration-2-darren
+    skip
     average_goals_by_season = {
       '20122013' =>	4.2,
       '20142015' =>	3.5,
@@ -113,26 +115,52 @@ class StatTrackerTest < Minitest::Test
   end
 
   def test_best_fans # iteration-3-darren
+    skip
     assert_equal "New England Revolution", @stat_tracker.best_fans
   end
 
   def test_worst_fans # iteration-3-darren
+    skip
     assert_equal ['FC Dallas'], @stat_tracker.worst_fans
   end
 
-  def test_most_goals_scored
+  def test_best_season #iteration-4-kevin
+    assert_equal "20142015", @stat_tracker.best_season("16")
+  end
+
+  def test_worst_season #iteration-4-kevin
+    assert_equal "20122013", @stat_tracker.worst_season("16")
+  end
+
+  def test_team_info #iteration-4-kevin
+    expected = {"team_id"=>"1", 
+      "franchise_id"=>"23", 
+      "team_name"=>"Atlanta United", 
+      "abbreviation"=>"ATL", 
+      "link"=>"/api/v1/teams/1"}
+
+    assert_equal expected, Team.team_info("1")
+  end
+
+  # duplicate to game tests
+  def test_average_win_percentage #iteration-4-kevin
+    assert_equal 0.64, @stat_tracker.average_win_percentage("16")
+    assert_equal 0, @stat_tracker.average_win_percentage("3")
+  end
+
+  def test_most_goals_scored #iteration-4-melissa
     assert_equal 4, @stat_tracker.most_goals_scored("6")
   end
 
-  def test_fewest_goals_scored
+  def test_fewest_goals_scored #iteration-4-melissa
     assert_equal 1, @stat_tracker.fewest_goals_scored("6")
   end
 
-  def test_favorite_opponent
+  def test_favorite_opponent #iteration-4-melissa
     assert_equal "DC United", @stat_tracker.favorite_opponent("16")
   end
 
-  def test_rival
+  def test_rival #iteration-4-melissa
     assert_equal "FC Cincinnati", @stat_tracker.rival("16")
   end
 end
