@@ -105,4 +105,26 @@ class StatTracker
     team_ids = Result.best_worst_fans.keep_if { |key, value| value[:diff_home_away_win_pct] < 0 }.keys
     team_names = team_ids.map { |team_id| Team.lookup_team_name(team_id) }
   end
+
+  def biggest_team_blowout(team_id) # iteration-4-darren
+    Game.biggest_team_blowout(team_id)
+  end
+
+  def worst_loss(team_id) # iteration-4-darren
+    Game.worst_loss(team_id)
+  end
+
+  def head_to_head(team_id) # iteration-4-darren
+    head_to_head = Game.head_to_head(team_id)
+    head_to_head_final = Hash.new()
+    head_to_head.each do |key, value|
+      head_to_head_final[Team.lookup_team_name(key)] = value
+    end
+    head_to_head_final
+  end
+
+  def seasonal_summary(team_id) # iteration-4-darren
+    Game.seasonal_summary(team_id)
+  end
+
 end

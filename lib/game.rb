@@ -81,4 +81,47 @@ class Game
     lowest ? team_average.min_by { |team, avg_opponent_goals| avg_opponent_goals}[0] : team_average.max_by { |team, avg_opponent_goals| avg_opponent_goals}[0]
   end
 
+  def self.biggest_team_blowout(team_id) # iteration-4-darren
+    select_games = @@game_data.find_all { |game| game.home_team_id == team_id && game.home_goals > game.away_goals }
+    select_games.map { |game| game.home_goals - game.away_goals }.max
+  end
+
+  def self.worst_loss(team_id) # iteration-4-darren
+    select_games = @@game_data.find_all { |game| game.home_team_id == team_id && game.home_goals < game.away_goals }
+    select_games.map { |game| game.away_goals - game.home_goals }.max
+  end
+
+  def self.head_to_head(team_id) # iteration-4-darren
+    select_games = @@game_data.find_all { |game| game.home_team_id == team_id }
+    head_to_head = Hash.new{ |hash, key| hash[key] = Hash.new(0) }
+    select_games.each do |game|
+      head_to_head[game.away_team_id][:nr_games_played] += 1
+      head_to_head[game.away_team_id][:nr_games_won] += 1 if game.home_goals > game.away_goals
+      head_to_head[game.away_team_id][:win_pct] = (head_to_head[game.away_team_id][:nr_games_won] / head_to_head[game.away_team_id][:nr_games_played].to_f).round(2)
+    end
+    head_to_head_final = Hash.new(0)
+    head_to_head.each { |key, value| head_to_head_final[key] = value[:win_pct] }
+    head_to_head_final
+  end
+
+  def self.seasonal_summary(team_id) # iteration-4-darren
+    seasonal = Hash.new{ |hash, key| hash[key] = Hash.new{ |nest_hash, nest_key| nest_hash[nest_key] = Hash.new(0) } }
+    select_games = @@game_data.find_all { |game| game.home_team_id == team_id }
+    select_games.each do |game|
+      if game.type == 'Regular Season'
+        game_type = :regular_season
+      elsif game.type == 'Postseason'
+        game_type = :postseason
+      end
+      seasonal[game.season][game_type][:nr_games_played] += 1
+      seasonal[game.season][game_type][:nr_games_won] += 1 if game.home_goals > game.away_goals
+      seasonal[game.season][game_type][:total_goals_scored] += game.home_goals
+      seasonal[game.season][game_type][:total_goals_against] += game.away_goals
+      seasonal[game.season][game_type][:average_goals_scored] = (seasonal[game.season][game_type][:total_goals_scored] / seasonal[game.season][game_type][:nr_games_played].to_f).round(2)
+      seasonal[game.season][game_type][:average_goals_against] = (seasonal[game.season][game_type][:total_goals_against] / seasonal[game.season][game_type][:nr_games_played].to_f).round(2)
+      seasonal[game.season][game_type][:win_percentage] = (seasonal[game.season][game_type][:nr_games_won] / seasonal[game.season][game_type][:nr_games_played].to_f).round(2)
+    end
+    seasonal
+  end
+
 end
