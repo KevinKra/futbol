@@ -25,16 +25,16 @@ class StatTracker
     Game.biggest_blowout
   end
 
-  def percentage_home_wins(team_id)
-    Result.games_by_team_id(team_id, "home", "WIN")
+  def percentage_home_wins
+    Result.global_result_percentages("home", "WIN")
   end
 
-  def percentage_visitor_wins(team_id)
-    Result.games_by_team_id(team_id, "away", "WIN")
+  def percentage_visitor_wins
+    Result.global_result_percentages("away", "WIN")
   end
 
-  def percentage_ties(team_id)
-    Result.games_by_team_id(team_id, "away", "TIE")
+  def percentage_ties
+    Result.global_result_percentages("away", "TIE")
   end
 
   def count_of_games_by_season

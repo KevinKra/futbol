@@ -37,15 +37,15 @@ class StatTrackerTest < Minitest::Test
   end
 
   def test_it_can_return_a_percentage_of_home_games_won
-    assert_equal 100.0, @stat_tracker.percentage_home_wins(6)
+    assert_equal 0.6, @stat_tracker.percentage_home_wins
   end
 
   def test_it_can_return_a_percentage_of_away_games_won
-    assert_equal 100, @stat_tracker.percentage_visitor_wins(6)
+    assert_equal 0.4, @stat_tracker.percentage_visitor_wins
   end
 
   def test_it_can_return_a_percentage_of_games_tied
-    assert_equal 0.0, @stat_tracker.percentage_ties(3)
+    assert_equal 0.0, @stat_tracker.percentage_ties
   end
 
   def test_count_of_games_by_season  # iteration-2-darren
@@ -141,6 +141,7 @@ class StatTrackerTest < Minitest::Test
     assert_equal expected, Team.team_info("1")
   end
 
+  # duplicate to game tests
   def test_average_win_percentage
     assert_equal 1.57, @stat_tracker.average_win_percentage("16")
     assert_equal 0, @stat_tracker.average_win_percentage("3")
