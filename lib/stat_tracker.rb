@@ -152,4 +152,14 @@ class StatTracker
     find_team_name(Game.rival(team_id), Team.team_data)
   end
 
+  def most_accurate_team(season_id) #iteration-5-melissa
+    game_ids = Game.games_by_season(season_id)
+    find_team_name(Result.most_accurate_team(game_ids), Team.team_data)
+  end
+
+  def least_accurate_team(season_id) #iteration-5-melissa
+    game_ids = Game.games_by_season(season_id)
+    find_team_name(Result.least_accurate_team(game_ids), Team.team_data)
+  end
+
 end
