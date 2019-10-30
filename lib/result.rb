@@ -1,7 +1,7 @@
 class Result
   @@result_data = []
 
-  attr_reader :team_id, :hoa, :result, :goals, :game_id
+  attr_reader :team_id, :hoa, :result, :goals, :game_id, :shots
 
   def initialize(result_data)
     @game_id = result_data[:game_id]
@@ -11,7 +11,7 @@ class Result
     @settled_in = result_data[:settled_in]
     @head_coach = result_data[:head_coach]
     @goals = result_data[:goals].to_i
-    @shots = result_data[:shots]
+    @shots = result_data[:shots].to_i
     @tackles = result_data[:tackles]
     @pim = result_data[:pim]
     @ppo = result_data[:powerplayopportunities]
@@ -141,5 +141,33 @@ class Result
    def self.fewest_goals_scored(team_id)
     self.all_goals_scored(team_id).min_by { |key, value| value }[1]
    end
+
+# Name of the Team with the best ratio of shots to goals for the season
+# Returns -> String
+  def self.most_accurate_team(season_games)
+  team_ratios = Hash.new{ |hash,k| hash[k] = Hash.new(0) }
+    @@result_data.each do |result|
+      if season_games.include?(result.game_id)
+        team_ratios[result.team_id][:num_goals] += result.goals
+        team_ratios[result.team_id][:num_shots] += result.shots
+        team_ratios[result.team_id][:shot_ratio] = (team_ratios[result.team_id][:num_goals] / team_ratios[result.team_id][:num_shots].to_f).round(4)
+      end
+    end
+    team_ratios.max_by {|key, value| value[:shot_ratio] }[0]
+  end
+
+  # Name of the Team with the worst ratio of shots to goals for the season
+  # Returns -> String
+  def self.least_accurate_team(season_games)
+  team_ratios = Hash.new{ |hash,k| hash[k] = Hash.new(0) }
+    @@result_data.each do |result|
+      if season_games.include?(result.game_id)
+        team_ratios[result.team_id][:num_goals] += result.goals
+        team_ratios[result.team_id][:num_shots] += result.shots
+        team_ratios[result.team_id][:shot_ratio] = (team_ratios[result.team_id][:num_goals] / team_ratios[result.team_id][:num_shots].to_f).round(4)
+      end
+    end
+    team_ratios.min_by {|key, value| value[:shot_ratio] }[0]
+  end
 
 end
