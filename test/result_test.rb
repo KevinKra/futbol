@@ -89,4 +89,28 @@ class ResultTest < Minitest::Test
     assert_equal "5", Result.least_accurate_team(season_games)
   end
 
+  def test_most_tackles
+    season_games = ["2012030221",
+                    "2012030222",
+                    "2012030223",
+                    "2012030224",
+                    "2012030225",
+                    "2012030311",
+                    "2012030312"]
+
+    assert_equal "6", Result.most_tackles(season_games)
+  end
+
+  def test_fewest_tackles
+    season_games = ["2012030221",
+                    "2012030222",
+                    "2012030223",
+                    "2012030224",
+                    "2012030225",
+                    "2012030311",
+                    "2012030312"]
+
+    assert_equal "5", Result.fewest_tackles(season_games)
+  end
+
 end
