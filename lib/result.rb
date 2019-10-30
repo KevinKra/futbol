@@ -1,7 +1,7 @@
 class Result
   @@result_data = []
 
-  attr_reader :team_id, :hoa, :result, :goals, :game_id, :shots
+  attr_reader :team_id, :hoa, :result, :goals, :game_id, :shots, :tackles
 
   def initialize(result_data)
     @game_id = result_data[:game_id]
@@ -12,7 +12,7 @@ class Result
     @head_coach = result_data[:head_coach]
     @goals = result_data[:goals].to_i
     @shots = result_data[:shots].to_i
-    @tackles = result_data[:tackles]
+    @tackles = result_data[:tackles].to_i
     @pim = result_data[:pim]
     @ppo = result_data[:powerplayopportunities]
     @ppg = result_data[:powerplaygoals]
@@ -168,6 +168,26 @@ class Result
       end
     end
     team_ratios.min_by {|key, value| value[:shot_ratio] }[0]
+  end
+
+  def self.most_tackles(season_games)
+  tackles = Hash.new{ |hash,k| hash[k] = Hash.new(0) }
+    @@result_data.each do |result|
+      if season_games.include?(result.game_id)
+        tackles[result.team_id][:num_tackles] += result.tackles
+      end
+    end
+    tackles.max_by {|key, value| value[:num_tackles] }[0]
+  end
+
+  def self.fewest_tackles(season_games)
+  tackles = Hash.new{ |hash,k| hash[k] = Hash.new(0) }
+    @@result_data.each do |result|
+      if season_games.include?(result.game_id)
+        tackles[result.team_id][:num_tackles] += result.tackles
+      end
+    end
+    tackles.min_by {|key, value| value[:num_tackles] }[0]
   end
 
 end
