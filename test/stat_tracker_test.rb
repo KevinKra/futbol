@@ -37,20 +37,20 @@ class StatTrackerTest < Minitest::Test
   end
 
   def test_it_can_return_a_percentage_of_home_games_won
-    assert_equal 0.55, @stat_tracker.percentage_home_wins
+    assert_equal 0.5, @stat_tracker.percentage_home_wins
   end
 
   def test_it_can_return_a_percentage_of_away_games_won
-    assert_equal 0.5, @stat_tracker.percentage_visitor_wins
+    assert_equal 0.47, @stat_tracker.percentage_visitor_wins
   end
 
   def test_it_can_return_a_percentage_of_games_tied
-    assert_equal 0.0, @stat_tracker.percentage_ties
+    assert_equal 0.06, @stat_tracker.percentage_ties
   end
 
   def test_count_of_games_by_season  # iteration-2-darren
     games_by_season = {
-      '20122013' =>	5,
+      '20122013' =>	7,
       '20142015' =>	6,
       '20152016' =>	5,
       '20162017' =>	4,
@@ -59,12 +59,12 @@ class StatTrackerTest < Minitest::Test
   end
 
   def test_average_goals_per_game  # iteration-2-darren
-    assert_equal 4.2, @stat_tracker.average_goals_per_game
+    assert_equal 4.14, @stat_tracker.average_goals_per_game
   end
 
   def test_average_goals_by_season  # iteration-2-darren
     average_goals_by_season = {
-      '20122013' =>	4.2,
+      '20122013' =>	4.0,
       '20142015' =>	3.5,
       '20152016' =>	4.6,
       '20162017' =>	4.75,
@@ -97,7 +97,7 @@ class StatTrackerTest < Minitest::Test
   end
 
   def test_highest_scoring_home_team
-    assert_equal "FC Dallas", @stat_tracker.highest_scoring_home_team
+    assert_equal "FC Cincinnati", @stat_tracker.highest_scoring_home_team
   end
 
   def test_lowest_scoring_visitor
@@ -113,7 +113,7 @@ class StatTrackerTest < Minitest::Test
   end
 
   def test_best_fans # iteration-3-darren
-    assert_equal "New England Revolution", @stat_tracker.best_fans
+    assert_equal "FC Cincinnati", @stat_tracker.best_fans
   end
 
   def test_worst_fans # iteration-3-darren
@@ -157,7 +157,7 @@ class StatTrackerTest < Minitest::Test
 
   # duplicate to game tests
   def test_average_win_percentage #iteration-4-kevin
-    assert_equal 0.64, @stat_tracker.average_win_percentage("16")
+    assert_equal 0.62, @stat_tracker.average_win_percentage("16")
     assert_equal 0, @stat_tracker.average_win_percentage("3")
   end
 
@@ -176,4 +176,13 @@ class StatTrackerTest < Minitest::Test
   def test_rival #iteration-4-melissa
     assert_equal "FC Cincinnati", @stat_tracker.rival("16")
   end
+
+  def test_most_accurate_team #iteration-5-melissa
+    assert_equal "FC Cincinnati", @stat_tracker.most_accurate_team("20122013")
+  end
+
+  def test_least_accurate_team #iteration-5-melissa
+    assert_equal "New England Revolution", @stat_tracker.least_accurate_team("20122013")
+  end
+
 end
