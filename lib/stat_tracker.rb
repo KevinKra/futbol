@@ -152,4 +152,39 @@ class StatTracker
     find_team_name(Game.rival(team_id), Team.team_data)
   end
 
+  def winningest_coach(season) # iteration-5-darren
+    games_by_season = Game.games_by_season(season)
+    Result.best_worst_coach(games_by_season).max_by do |key, value|
+      value[:win_percentage]
+    end[0]
+  end
+
+  def worst_coach(season) # iteration-5-darren
+    games_by_season = Game.games_by_season(season)
+    Result.best_worst_coach(games_by_season).min_by do |key, value|
+      value[:win_percentage]
+    end[0]
+  end
+
+  def biggest_bust(season) # Name of the team with the biggest decrease between regular season and postseason win percentage
+    team_id = Game.biggest_bust_surprise(season).min_by do |key, value|
+      value[:regular_vs_post]
+    end[0]
+    find_team_name(team_id, Team.team_data)
+  end
+
+  # def biggest_surprise(season) # Name of the team with the biggest increase between regular season and postseason win percentage
+  #   team_ids = Game.biggest_bust_surprise(season)
+  #   team_id = team_ids.max_by do |key, value|
+  #     value[:regular_vs_post]
+  #   end[0]
+  #   find_team_name(team_id, Team.team_data)
+  # end
+
+  def biggest_surprise(season) # Name of the team with the biggest increase between regular season and postseason win percentage
+    team_ids = Game.biggest_bust_surprise(season)
+    the_one = team_ids.max_by {|key, value| value[:regular_vs_post] }[0]
+    find_team_name(team_id, Team.team_data)
+  end
+
 end

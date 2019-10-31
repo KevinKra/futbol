@@ -1,7 +1,7 @@
 class Result
   @@result_data = []
 
-  attr_reader :team_id, :hoa, :result, :goals, :game_id
+  attr_reader :team_id, :hoa, :result, :goals, :game_id, :head_coach
 
   def initialize(result_data)
     @game_id = result_data[:game_id]
@@ -140,6 +140,24 @@ class Result
   # -> Returns Integer
    def self.fewest_goals_scored(team_id)
     self.all_goals_scored(team_id).min_by { |key, value| value }[1]
+   end
+
+
+   def self.best_worst_coach(games_by_season) # iteration-5-darren
+     coach_results = Hash.new { |hash, key| hash[key] = Hash.new(0) }
+     games_by_season.each do |game|
+       home_coach = @@result_data.find { |result| result.game_id == game.game_id && result.team_id == game.home_team_id }.head_coach
+       home_team_id = game.home_team_id
+       coach_results[home_coach][:nr_games_coached] += 1
+       coach_results[home_coach][:coached_games_won] += 1 if game.home_goals > game.away_goals
+       coach_results[home_coach][:win_percentage] = (coach_results[home_coach][:coached_games_won] / coach_results[home_coach][:nr_games_coached].to_f).round(2)
+       away_coach = @@result_data.find { |result| result.game_id == game.game_id && result.team_id == game.away_team_id }.head_coach
+       away_team_id = game.away_team_id
+       coach_results[away_coach][:nr_games_coached] += 1
+       coach_results[away_coach][:coached_games_won] += 1 if game.away_goals > game.home_goals
+       coach_results[away_coach][:win_percentage] = (coach_results[away_coach][:coached_games_won] / coach_results[away_coach][:nr_games_coached].to_f).round(2)
+     end
+     coach_results
    end
 
 end

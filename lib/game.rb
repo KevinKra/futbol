@@ -34,23 +34,23 @@ class Game
   end
 
   def self.season_outcome(team_id, worst = false)
-    team_data = @@game_data.select do |game| 
+    team_data = @@game_data.select do |game|
       game if game.home_team_id == team_id || game.away_team_id == team_id
     end
     season_avg =  Hash[team_data.map { |game| [game.season, []]}]
     team_data.each do |game|
       if game.home_team_id == team_id
-       game.home_goals > game.away_goals ? season_avg[game.season] << 1 
+       game.home_goals > game.away_goals ? season_avg[game.season] << 1
         : season_avg[game.season] << 0
       else game.away_team_id == team_id
-        game.away_goals > game.home_goals ? season_avg[game.season] << 1 
+        game.away_goals > game.home_goals ? season_avg[game.season] << 1
         : season_avg[game.season] << 0
       end
     end
     season_avg.each { |key, value| season_avg[key] = (value.sum.to_f / value.length).round(2) }
     worst ? season_avg.min_by { |season, avg| avg}[0] : season_avg.max_by { |team, avg| avg}[0]
   end
- 
+
 
   # Helper method to sum total score by game -> Returns array of Integers
   def self.total_scores
@@ -98,9 +98,9 @@ class Game
     @@game_data.each { |game| team_average[game.home_team_id] << game.away_goals}
     @@game_data.each { |game| team_average[game.away_team_id] << game.home_goals}
     team_average.each { |key, value| team_average[key] = (value.sum.to_f / value.length.to_f).round(3) }
-    if lowest 
+    if lowest
       team_average.min_by { |team, avg_opponent_goals| avg_opponent_goals}[0]
-    else 
+    else
       team_average.max_by { |team, avg_opponent_goals| avg_opponent_goals}[0]
     end
   end
@@ -272,4 +272,44 @@ class Game
     return [away_goals, home_goals] if hoa == 'away'
   end
 
+  def self.games_by_season(season)  # iteration-5-darren helper
+    @@game_data.find_all { |game| game.season == season }
+  end
+
+  def self.biggest_bust_surprise(season)
+    results = nested_hash
+    games_by_season(season).each do |game|
+      gm_type = game.type.gsub('Post','post_').gsub(' ','_').downcase.to_sym
+      home_tm_id = game.home_team_id
+      away_tm_id = game.away_team_id
+      results[gm_type][home_tm_id][:nr_games_played] += 1
+      results[gm_type][home_tm_id][:nr_games_won] += 1 if game.home_goals > game.away_goals
+      results[:all_seasons][home_tm_id][:regular_vs_post] = 0
+      results[gm_type][home_tm_id][:win_pct] = (results[gm_type][home_tm_id][:nr_games_won] / results[gm_type][home_tm_id][:nr_games_played].to_f).round(2)
+      results[gm_type][away_tm_id][:nr_games_played] += 1
+      results[gm_type][away_tm_id][:nr_games_won] += 1 if game.away_goals > game.home_goals
+      results[:all_seasons][away_tm_id][:regular_vs_post] = 0
+      results[gm_type][away_tm_id][:win_pct] = (results[gm_type][away_tm_id][:nr_games_won] / results[gm_type][away_tm_id][:nr_games_played].to_f).round(2)
+    end
+    compare_post_regular_seasons(results)[:all_seasons]
+  end
+
+  def self.compare_post_regular_seasons(input_data)
+    results = input_data
+    results.each do |key, value|
+      value.each do |nest_key, nest_value|
+        if results[:regular_season].has_key?(nest_key)
+          regular_win_pct = results[:regular_season][nest_key][:win_pct]
+        else
+          regular_win_pct = 0
+        end
+        if results[:post_season].has_key?(nest_key)
+          post_win_pct = results[:post_season][nest_key][:win_pct]
+        else
+          post_win_pct = 0
+        end
+        results[:all_seasons][nest_key][:regular_vs_post] = (post_win_pct - regular_win_pct).round(2)
+      end
+    end
+  end
 end
