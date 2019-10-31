@@ -176,26 +176,26 @@ class StatTracker
   def biggest_surprise(season) # Name of the team with the biggest increase between regular season and postseason win percentage
     team_ids = Game.biggest_bust_surprise(season)
     the_one = team_ids.max_by {|key, value| value[:regular_vs_post] }[0]
-    find_team_name(team_id, Team.team_data)
+    find_team_name(the_one, Team.team_data)
   end
 
   def most_accurate_team(season_id) #iteration-5-melissa
-    game_ids = Game.games_by_season(season_id)
+    game_ids = Game.games_by_season_id(season_id)
     find_team_name(Result.most_accurate_team(game_ids), Team.team_data)
   end
 
   def least_accurate_team(season_id) #iteration-5-melissa
-    game_ids = Game.games_by_season(season_id)
+    game_ids = Game.games_by_season_id(season_id)
     find_team_name(Result.least_accurate_team(game_ids), Team.team_data)
   end
 
   def most_tackles(season_id) #iteration-5-melissa
-    game_ids = Game.games_by_season(season_id)
+    game_ids = Game.games_by_season_id(season_id)
     find_team_name(Result.most_tackles(game_ids), Team.team_data)
   end
 
   def fewest_tackles(season_id) #iteration-5-melissa
-    game_ids = Game.games_by_season(season_id)
+    game_ids = Game.games_by_season_id(season_id)
     find_team_name(Result.fewest_tackles(game_ids), Team.team_data)
   end
 end
