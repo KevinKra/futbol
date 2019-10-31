@@ -18,11 +18,11 @@ class StatTrackerTest < Minitest::Test
     assert_instance_of StatTracker, @stat_tracker
   end
 
-  # def test_initialized
-  #   assert_equal 32, @stat_tracker.team_data.length
-  #   assert_equal 7, @stat_tracker.result_data.length
-  #   assert_equal 7441, @stat_tracker.game_data.length
-  # end
+  def test_initialized
+    assert_equal 29, @teams.length
+    assert_equal 33, @results.length
+    assert_equal 22, @games.length
+  end
 
   def test_highest_total_score
     assert_equal 7, @stat_tracker.highest_total_score
@@ -178,22 +178,21 @@ class StatTrackerTest < Minitest::Test
   end
 
   def test_winningest_coach # iteration-5-darren
-    assert_equal "", @stat_tracker.winningest_coach('20122013')
+    assert_equal "Joel Quenneville", @stat_tracker.winningest_coach('20122013')
   end
 
   def test_worst_coach # iteration-5-darren
-    games_by_season = Game.games_by_season('20122013')
-    assert_equal "Joel Quenneville", @stat_tracker.worst_coach(games_by_season)
+    assert_equal "Darryl Sutter", @stat_tracker.worst_coach('20122013')
   end
 
   def biggest_bust
-    assert_equal '', @stat_tracker.biggest_bust
+    assert_equal "Darryl Sutter", @stat_tracker.biggest_bust('20122013')
   end
 
   def biggest_surprise
-
+    assert_equal "Darryl Sutter", @stat_tracker.biggest_surprise('20122013')
   end
-  
+
   def test_most_accurate_team #iteration-5-melissa
     assert_equal "FC Cincinnati", @stat_tracker.most_accurate_team("20122013")
   end
