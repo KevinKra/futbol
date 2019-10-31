@@ -72,6 +72,14 @@ class GameTest < Minitest::Test
     assert_equal "26", Game.get_opponent("16", "26", "16")
   end
 
+  def test_home_or_away
+    assert_equal "away", Game.home_or_away("16", "26", "16")
+  end
+
+  def test_home_goals_away_goals
+    assert_equal ["3", "1"], Game.home_goals_away_goals("home", "3", "1")
+  end
+
   def test_games_by_season #iteration-5-melissa
     assert_equal 7, Game.games_by_season("20122013").count
   end
