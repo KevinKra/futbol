@@ -1,7 +1,7 @@
 require_relative './test_helper'
 require_relative '../lib/stat_tracker.rb'
-require_relative "../lib/game.rb"
-require_relative "../lib/result.rb"
+require_relative '../lib/game.rb'
+require_relative '../lib/result.rb'
 
 class StatTrackerTest < Minitest::Test
   def setup
