@@ -275,6 +275,10 @@ class Game
   def self.games_by_season(season)  # iteration-5-darren helper
     @@game_data.find_all { |game| game.season == season }
   end
+  
+   def self.games_by_season_id(season) #iteration-5-melissa helper
+    games_by_season(season).map {|game| game.game_id }
+  end
 
   def self.biggest_bust_surprise(season)
     results = nested_hash
