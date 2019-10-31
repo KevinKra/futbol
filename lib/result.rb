@@ -159,10 +159,10 @@ class Result
      coach_results
    end
 
-# Name of the Team with the best ratio of shots to goals for the season
-# Returns -> String
-  def self.most_accurate_team(season_games)
-  team_ratios = Hash.new{ |hash,k| hash[k] = Hash.new(0) }
+  # Helper method to generate hash of shot ratios by team by season
+  # Returns -> nested Hash
+  def self.shot_ratios_by_season(season_games)
+    team_ratios = Hash.new{ |hash,k| hash[k] = Hash.new(0) }
     @@result_data.each do |result|
       if season_games.include?(result.game_id)
         team_ratios[result.team_id][:num_goals] += result.goals
@@ -170,40 +170,41 @@ class Result
         team_ratios[result.team_id][:shot_ratio] = (team_ratios[result.team_id][:num_goals] / team_ratios[result.team_id][:num_shots].to_f).round(4)
       end
     end
+    team_ratios
+  end
+
+  # Name of the Team with the best ratio of shots to goals for the season
+  # Returns -> String
+  def self.most_accurate_team(game_ids)
+    team_ratios = shot_ratios_by_season(game_ids)
     team_ratios.max_by {|key, value| value[:shot_ratio] }[0]
   end
 
   # Name of the Team with the worst ratio of shots to goals for the season
   # Returns -> String
-  def self.least_accurate_team(season_games)
-  team_ratios = Hash.new{ |hash,k| hash[k] = Hash.new(0) }
-    @@result_data.each do |result|
-      if season_games.include?(result.game_id)
-        team_ratios[result.team_id][:num_goals] += result.goals
-        team_ratios[result.team_id][:num_shots] += result.shots
-        team_ratios[result.team_id][:shot_ratio] = (team_ratios[result.team_id][:num_goals] / team_ratios[result.team_id][:num_shots].to_f).round(4)
-      end
-    end
+  def self.least_accurate_team(game_ids)
+    team_ratios = shot_ratios_by_season(game_ids)
     team_ratios.min_by {|key, value| value[:shot_ratio] }[0]
   end
 
-  def self.most_tackles(season_games)
+  # Helper method that generates hash of tackles by season by team
+  def self.tackles_by_season(season_games)
   tackles = Hash.new{ |hash,k| hash[k] = Hash.new(0) }
     @@result_data.each do |result|
       if season_games.include?(result.game_id)
         tackles[result.team_id][:num_tackles] += result.tackles
       end
     end
+    tackles
+  end
+
+  def self.most_tackles(season_games)
+    tackles = tackles_by_season(season_games)
     tackles.max_by {|key, value| value[:num_tackles] }[0]
   end
 
   def self.fewest_tackles(season_games)
-  tackles = Hash.new{ |hash,k| hash[k] = Hash.new(0) }
-    @@result_data.each do |result|
-      if season_games.include?(result.game_id)
-        tackles[result.team_id][:num_tackles] += result.tackles
-      end
-    end
+    tackles = tackles_by_season(season_games)
     tackles.min_by {|key, value| value[:num_tackles] }[0]
   end
 end
