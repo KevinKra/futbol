@@ -15,13 +15,13 @@ class ResultTest < Minitest::Test
 
   def test_it_has_the_correct_data_amount
     total_data = Result.result_data
-    assert_equal 23, total_data.length
+    assert_equal 33, total_data.length
   end
 
   def test_global_result_percentages
-    assert_equal 0.55, Result.global_result_percentages("home", "WIN")
-    assert_equal 0.5, Result.global_result_percentages("away", "WIN")
-    assert_equal 0.0, Result.global_result_percentages("away", "TIE")
+    assert_equal 0.5, Result.global_result_percentages("home", "WIN")
+    assert_equal 0.47, Result.global_result_percentages("away", "WIN")
+    assert_equal 0.06, Result.global_result_percentages("away", "TIE")
   end
 
   def test_average_scores_by_type
@@ -33,7 +33,7 @@ class ResultTest < Minitest::Test
   end
 
   def test_highest_scoring_home_team
-    assert_equal "6", Result.highest_scoring_home_team
+    assert_equal "26", Result.highest_scoring_home_team
   end
 
   def test_lowest_scoring_visitor
@@ -65,5 +65,52 @@ class ResultTest < Minitest::Test
     assert_equal 1, Result.fewest_goals_scored("6")
   end
 
+  def test_most_accurate_team
+    season_games = ["2012030221",
+                    "2012030222",
+                    "2012030223",
+                    "2012030224",
+                    "2012030225",
+                    "2012030311",
+                    "2012030312"]
+
+    assert_equal "6", Result.most_accurate_team(season_games)
+  end
+
+  def test_least_accurate_team
+    season_games = ["2012030221",
+                    "2012030222",
+                    "2012030223",
+                    "2012030224",
+                    "2012030225",
+                    "2012030311",
+                    "2012030312"]
+
+    assert_equal "5", Result.least_accurate_team(season_games)
+  end
+
+  def test_most_tackles
+    season_games = ["2012030221",
+                    "2012030222",
+                    "2012030223",
+                    "2012030224",
+                    "2012030225",
+                    "2012030311",
+                    "2012030312"]
+
+    assert_equal "6", Result.most_tackles(season_games)
+  end
+
+  def test_fewest_tackles
+    season_games = ["2012030221",
+                    "2012030222",
+                    "2012030223",
+                    "2012030224",
+                    "2012030225",
+                    "2012030311",
+                    "2012030312"]
+
+    assert_equal "5", Result.fewest_tackles(season_games)
+  end
 
 end

@@ -1,7 +1,7 @@
 class Result
   @@result_data = []
 
-  attr_reader :team_id, :hoa, :result, :goals, :game_id
+  attr_reader :team_id, :hoa, :result, :goals, :game_id, :shots, :head_coach, :tackles
 
   def initialize(result_data)
     @game_id = result_data[:game_id]
@@ -11,8 +11,8 @@ class Result
     @settled_in = result_data[:settled_in]
     @head_coach = result_data[:head_coach]
     @goals = result_data[:goals].to_i
-    @shots = result_data[:shots]
-    @tackles = result_data[:tackles]
+    @shots = result_data[:shots].to_i
+    @tackles = result_data[:tackles].to_i
     @pim = result_data[:pim]
     @ppo = result_data[:powerplayopportunities]
     @ppg = result_data[:powerplaygoals]
@@ -142,4 +142,69 @@ class Result
     self.all_goals_scored(team_id).min_by { |key, value| value }[1]
    end
 
+   def self.best_worst_coach(games_by_season) # iteration-5-darren
+     coach_results = Hash.new { |hash, key| hash[key] = Hash.new(0) }
+     games_by_season.each do |game|
+       home_coach = @@result_data.find { |result| result.game_id == game.game_id && result.team_id == game.home_team_id }.head_coach
+       home_team_id = game.home_team_id
+       coach_results[home_coach][:nr_games_coached] += 1
+       coach_results[home_coach][:coached_games_won] += 1 if game.home_goals > game.away_goals
+       coach_results[home_coach][:win_percentage] = (coach_results[home_coach][:coached_games_won] / coach_results[home_coach][:nr_games_coached].to_f).round(2)
+       away_coach = @@result_data.find { |result| result.game_id == game.game_id && result.team_id == game.away_team_id }.head_coach
+       away_team_id = game.away_team_id
+       coach_results[away_coach][:nr_games_coached] += 1
+       coach_results[away_coach][:coached_games_won] += 1 if game.away_goals > game.home_goals
+       coach_results[away_coach][:win_percentage] = (coach_results[away_coach][:coached_games_won] / coach_results[away_coach][:nr_games_coached].to_f).round(2)
+     end
+     coach_results
+   end
+
+  # Helper method to generate hash of shot ratios by team by season
+  # Returns -> nested Hash
+  def self.shot_ratios_by_season(season_games)
+    team_ratios = Hash.new{ |hash,k| hash[k] = Hash.new(0) }
+    @@result_data.each do |result|
+      if season_games.include?(result.game_id)
+        team_ratios[result.team_id][:num_goals] += result.goals
+        team_ratios[result.team_id][:num_shots] += result.shots
+        team_ratios[result.team_id][:shot_ratio] = (team_ratios[result.team_id][:num_goals] / team_ratios[result.team_id][:num_shots].to_f).round(4)
+      end
+    end
+    team_ratios
+  end
+
+  # Name of the Team with the best ratio of shots to goals for the season
+  # Returns -> String
+  def self.most_accurate_team(game_ids)
+    team_ratios = shot_ratios_by_season(game_ids)
+    team_ratios.max_by {|key, value| value[:shot_ratio] }[0]
+  end
+
+  # Name of the Team with the worst ratio of shots to goals for the season
+  # Returns -> String
+  def self.least_accurate_team(game_ids)
+    team_ratios = shot_ratios_by_season(game_ids)
+    team_ratios.min_by {|key, value| value[:shot_ratio] }[0]
+  end
+
+  # Helper method that generates hash of tackles by season by team
+  def self.tackles_by_season(season_games)
+  tackles = Hash.new{ |hash,k| hash[k] = Hash.new(0) }
+    @@result_data.each do |result|
+      if season_games.include?(result.game_id)
+        tackles[result.team_id][:num_tackles] += result.tackles
+      end
+    end
+    tackles
+  end
+
+  def self.most_tackles(season_games)
+    tackles = tackles_by_season(season_games)
+    tackles.max_by {|key, value| value[:num_tackles] }[0]
+  end
+
+  def self.fewest_tackles(season_games)
+    tackles = tackles_by_season(season_games)
+    tackles.min_by {|key, value| value[:num_tackles] }[0]
+  end
 end
