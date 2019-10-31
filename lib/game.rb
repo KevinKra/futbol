@@ -51,7 +51,6 @@ class Game
     worst ? season_avg.min_by { |season, avg| avg}[0] : season_avg.max_by { |team, avg| avg}[0]
   end
 
-
   # Helper method to sum total score by game -> Returns array of Integers
   def self.total_scores
     @@game_data.map { |game| game.away_goals + game.home_goals }
@@ -275,7 +274,7 @@ class Game
   def self.games_by_season(season)  # iteration-5-darren helper
     @@game_data.find_all { |game| game.season == season }
   end
-  
+
    def self.games_by_season_id(season) #iteration-5-melissa helper
     games_by_season(season).map {|game| game.game_id }
   end
@@ -289,11 +288,11 @@ class Game
       results[gm_type][home_tm_id][:nr_games_played] += 1
       results[gm_type][home_tm_id][:nr_games_won] += 1 if game.home_goals > game.away_goals
       results[:all_seasons][home_tm_id][:regular_vs_post] = 0
-      results[gm_type][home_tm_id][:win_pct] = (results[gm_type][home_tm_id][:nr_games_won] / results[gm_type][home_tm_id][:nr_games_played].to_f).round(2)
+      results[gm_type][home_tm_id][:win_pct] = (results[gm_type][home_tm_id][:nr_games_won] / results[gm_type][home_tm_id][:nr_games_played].to_f).round(3)
       results[gm_type][away_tm_id][:nr_games_played] += 1
       results[gm_type][away_tm_id][:nr_games_won] += 1 if game.away_goals > game.home_goals
       results[:all_seasons][away_tm_id][:regular_vs_post] = 0
-      results[gm_type][away_tm_id][:win_pct] = (results[gm_type][away_tm_id][:nr_games_won] / results[gm_type][away_tm_id][:nr_games_played].to_f).round(2)
+      results[gm_type][away_tm_id][:win_pct] = (results[gm_type][away_tm_id][:nr_games_won] / results[gm_type][away_tm_id][:nr_games_played].to_f).round(3)
     end
     compare_post_regular_seasons(results)[:all_seasons]
   end
@@ -312,7 +311,7 @@ class Game
         else
           post_win_pct = 0
         end
-        results[:all_seasons][nest_key][:regular_vs_post] = (post_win_pct - regular_win_pct).round(2)
+        results[:all_seasons][nest_key][:regular_vs_post] = (post_win_pct - regular_win_pct).round(3)
       end
     end
   end
