@@ -167,15 +167,14 @@ class StatTracker
   end
 
   def biggest_bust(season) # Name of the team with the biggest decrease between regular season and postseason win percentage
-    team_id = Game.biggest_bust_surprise(season).min_by do |key, value|
-      value[:regular_vs_post]
-    end[0]
-    find_team_name(team_id, Team.team_data)
+    team_ids = Game.biggest_bust_surprise(season)
+    the_one = team_ids.min_by {|key, value| value[:regular_vs_post]}[0]
+    find_team_name(the_one, Team.team_data)
   end
 
   def biggest_surprise(season) # Name of the team with the biggest increase between regular season and postseason win percentage
     team_ids = Game.biggest_bust_surprise(season)
-    the_one = team_ids.max_by {|key, value| value[:regular_vs_post] }[0]
+    the_one = team_ids.max_by {|key, value| value[:regular_vs_post]}[0]
     find_team_name(the_one, Team.team_data)
   end
 
