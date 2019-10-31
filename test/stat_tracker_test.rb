@@ -177,6 +177,23 @@ class StatTrackerTest < Minitest::Test
     assert_equal "FC Cincinnati", @stat_tracker.rival("16")
   end
 
+  def test_winningest_coach # iteration-5-darren
+    assert_equal "", @stat_tracker.winningest_coach('20122013')
+  end
+
+  def test_worst_coach # iteration-5-darren
+    games_by_season = Game.games_by_season('20122013')
+    assert_equal "Joel Quenneville", @stat_tracker.worst_coach(games_by_season)
+  end
+
+  def biggest_bust
+    assert_equal '', @stat_tracker.biggest_bust
+  end
+
+  def biggest_surprise
+
+  end
+  
   def test_most_accurate_team #iteration-5-melissa
     assert_equal "FC Cincinnati", @stat_tracker.most_accurate_team("20122013")
   end
@@ -192,5 +209,4 @@ class StatTrackerTest < Minitest::Test
   def test_fewest_tackles
     assert_equal "New England Revolution", @stat_tracker.fewest_tackles("20122013")
   end
-
 end
